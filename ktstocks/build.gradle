@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'maven-publish'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    // OkHttp
+    api 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+
+    // Gson
+    api 'com.google.code.gson:gson:2.9.1'
+
+    // Jsoup
+    api 'org.jsoup:jsoup:1.13.1'
+
+    // TA Lib
+    api 'com.tictactec:ta-lib:0.4.0'
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) {
+            groupId 'com.github.willor777'
+            artifactId 'ktstockdatalib-shadowversion'
+            version '0.0.1'
+            from components.java
+        }
+    }
+}
