@@ -1,6 +1,12 @@
 package com.willor.ktstockdata.marketdata
 
-import com.willor.ktstockdata.marketdata.dataobjects.*
+import com.willor.ktstockdata.marketdata.dataobjects.MajorFuturesData
+import com.willor.ktstockdata.marketdata.dataobjects.MajorIndicesData
+import com.willor.ktstockdata.marketdata.dataobjects.SnRLevels
+import com.willor.ktstockdata.marketdata.dataobjects.EtfQuote
+import com.willor.ktstockdata.marketdata.dataobjects.OptionStats
+import com.willor.ktstockdata.marketdata.dataobjects.StockCompetitorsList
+import com.willor.ktstockdata.marketdata.dataobjects.StockQuote
 
 interface IMarketData {
 

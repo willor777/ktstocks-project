@@ -1,8 +1,6 @@
 package com.willor.ktstockdata.watchlistsdata
 
-import com.willor.ktstockdata.common.NetworkClient
-import com.willor.ktstockdata.common.parseDouble
-import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
+import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Ticker
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Watchlist
 import org.jsoup.Jsoup
@@ -72,6 +70,9 @@ class WatchlistData {
                                 marketCap = parseLongFromBigAbbreviatedNumbers(rowData[8])
                             )
                         }
+                    }
+                    else ->{
+                        returnValue = null
                     }
                 }
                 returnValue

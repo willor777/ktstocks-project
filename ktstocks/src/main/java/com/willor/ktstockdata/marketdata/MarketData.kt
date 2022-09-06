@@ -1,6 +1,10 @@
 package com.willor.ktstockdata.marketdata
 
 import com.willor.ktstockdata.common.*
+import com.willor.ktstockdata.common.NetworkClient
+import com.willor.ktstockdata.common.parseDouble
+import com.willor.ktstockdata.common.parseInt
+import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.marketdata.dataobjects.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -61,9 +65,6 @@ class MarketData: IMarketData {
 
             // Set up place holders + pull easy data
             val compName = topRowElements.select("h1").text()
-            var regLastPrice = ""
-            var regChangeDol = ""
-            var regChangePct = "(0.0%)"
             var ppLastPrice = "0.0"
             var ppChangeDol = "0.0"
             var ppChangePct = "(0.0%)"
@@ -78,9 +79,9 @@ class MarketData: IMarketData {
             }
 
             // Regular market price info is always there
-            regLastPrice = data[0]
-            regChangeDol = data[1]
-            regChangePct = data[2]
+            val regLastPrice = data[0]
+            val regChangeDol = data[1]
+            val regChangePct = data[2]
 
             // After market is only there after / before market open/close
             if (data.size >= 8){

@@ -5,25 +5,19 @@ import okhttp3.Request
 
 internal object NetworkClient {
 
-    private val client: OkHttpClient by lazy{
-        OkHttpClient.Builder()
-            .retryOnConnectionFailure(true)
-            .followRedirects(true)      // VERY IMPORTANT FOR ANDROID
-            .followSslRedirects(true)       // ALSO MAYBE
-            .build()
-    }
+    private var client: OkHttpClient? = null
 
 
     /**
      * Returns the Singleton Instance of OkHttpclient
      */
-//    fun getClient(): OkHttpClient {
-////        if (client == null) {
-////            client = buildClient()
-////        }
-//
-//        return client!!
-//    }
+    fun getClient(): OkHttpClient {
+        if (client == null) {
+            client = buildClient()
+        }
+
+        return client!!
+    }
 
 
     /**
@@ -31,7 +25,7 @@ internal object NetworkClient {
      */
     fun getWebpage(url: String): String?{
 
-        val call = client.newCall(
+        val call = getClient().newCall(
             Request.Builder()
                 .url(url)
                 .header("user-agent", getRandomUserAgent())
