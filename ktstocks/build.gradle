@@ -28,7 +28,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.github.willor777'
             artifactId 'ktstockdatalib-shadowversion'
-            version '0.0.1'
+            version '0.0.2-alpha'
             from components.java
         }
     }
