@@ -11,16 +11,16 @@ java {
 
 dependencies {
     // OkHttp
-    api 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
 
     // Gson
-    api 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
     // Jsoup
-    api 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // TA Lib
-    api 'com.tictactec:ta-lib:0.4.0'
+    implementation 'com.tictactec:ta-lib:0.4.0'
 }
 
 publishing {
@@ -28,7 +28,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.github.willor777'
             artifactId 'ktstockdatalib-shadowversion'
-            version '0.0.2-alpha'
+            version '0.0.3-alpha'
             from components.java
         }
     }
