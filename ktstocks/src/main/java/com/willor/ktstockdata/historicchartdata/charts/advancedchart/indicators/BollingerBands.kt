@@ -1,4 +1,4 @@
-package com.willor.ktstockdata.historicaldata.charts.advancedchart.indicators
+package com.willor.ktstockdata.historicchartdata.charts.advancedchart.indicators
 
 import com.tictactec.ta.lib.MAType
 import com.tictactec.ta.lib.MInteger

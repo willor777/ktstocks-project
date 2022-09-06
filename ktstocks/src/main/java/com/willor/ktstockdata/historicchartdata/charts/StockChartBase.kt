@@ -1,6 +1,6 @@
-package com.willor.ktstockdata.historicaldata.charts
+package com.willor.ktstockdata.historicchartdata.charts
 
-import com.willor.ktstockdata.historicaldata.dataobjects.candle.Candle
+import com.willor.ktstockdata.historicchartdata.dataobjects.candle.Candle
 import java.util.*
 
 abstract class StockChartBase(

@@ -1,9 +1,9 @@
-package com.willor.ktstockdata.historicaldata
+package com.willor.ktstockdata.historicchartdata
 
-import com.willor.ktstockdata.historicaldata.charts.advancedchart.AdvancedStockChart
-import com.willor.ktstockdata.historicaldata.charts.simplechart.SimpleStockChart
+import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
+import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
 
-interface IHistory {
+interface IHistoricChartData {
 
     fun getHistoryAsSimpleStockChart(
         ticker: String,

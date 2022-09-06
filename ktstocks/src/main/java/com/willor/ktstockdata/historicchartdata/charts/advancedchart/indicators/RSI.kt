@@ -1,30 +1,34 @@
-package com.willor.ktstockdata.historicaldata.charts.advancedchart.indicators
+package com.willor.ktstockdata.historicchartdata.charts.advancedchart.indicators
 
 import com.tictactec.ta.lib.MInteger
 
-class EMA(
+class RSI(
     val inputData: List<Double>,
-    val window: Int
-): IndicatorBase(){
+    val window: Int = 14
+) : IndicatorBase(){
 
-    val values: List<Double>
-    val lastIndex = inputData.lastIndex
     val size = inputData.size
+    val lastIndex = inputData.lastIndex
+    val values: List<Double>
 
     init {
-        val size = calculateOutputArraySize(inputData.size, window)
 
+        // RSI requires 1 more value than the window, so window + 1 in size calculation
+        val size = calculateOutputArraySize(inputData.size, window + 1)
         val outArr = DoubleArray(size)
 
-        talib.ema(0, inputData.lastIndex,
-        inputData.toDoubleArray(),
+        // startI, endI, input, window, _, _, output
+        talib.rsi(
+            0,
+            inputData.lastIndex,
+            inputData.toDoubleArray(),
             window,
-            MInteger(),
-            MInteger(),
+            MInteger(), MInteger(),
             outArr
         )
 
         values = fillMissingValues(outArr, inputData)
+
     }
 
     fun getValueAtIndex(i: Int): Double{

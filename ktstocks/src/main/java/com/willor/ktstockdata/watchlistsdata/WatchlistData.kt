@@ -1,12 +1,14 @@
 package com.willor.ktstockdata.watchlistsdata
 
-import com.willor.ktstockdata.common.*
+import com.willor.ktstockdata.common.NetworkClient
+import com.willor.ktstockdata.common.parseDouble
+import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Ticker
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Watchlist
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-class Watchlists {
+class WatchlistData {
 
     // TODO Add a search for keyword function
 
@@ -108,7 +110,7 @@ class Watchlists {
         return Watchlist(wlName, tickers)
     }
 
-    fun searchForWatchlistByKeywords(vararg keywords: String): List<WatchlistOptions>?{
+    fun searchForByKeywords(vararg keywords: String): List<Watchlist>?{
         val matches = mutableListOf<WatchlistOptions>()
 
         for(w in WatchlistOptions.values()){
@@ -119,15 +121,20 @@ class Watchlists {
             }
         }
 
-        // If matches were found, return them, else null
-        return if (matches.size > 0){
-            matches
-        }else{
+        val watchlistMatches = mutableListOf<Watchlist>()
+        matches.forEach{
+            getWatchlistByWatchlistOption(it)?.let{ wl ->
+                watchlistMatches.add(wl)
+            }
+        }
+        return if(watchlistMatches.isNotEmpty()){
+            watchlistMatches.toList()
+        } else{
             null
         }
     }
 
-    fun getWatchlist(w: WatchlistOptions): Watchlist?{
+    fun getWatchlistByWatchlistOption(w: WatchlistOptions): Watchlist?{
         when (w) {
             WatchlistOptions.GAINERS -> {
                 return getGainers()
@@ -415,19 +422,6 @@ class Watchlists {
         )
     }
 
-    fun getAllTickerSymbols(): List<String>{
 
-        val fn = "raw/sp500_tickers.json"
-
-        val file = this::class.java.getResource(fn)
-
-        Log.d("TESTING", "Watchlists SP500: ${
-           file
-        }")
-
-
-
-        return listOf()
-    }
 
 }

@@ -1,10 +1,6 @@
 package com.willor.ktstockdata.marketdata
 
 import com.willor.ktstockdata.common.*
-import com.willor.ktstockdata.common.NetworkClient
-import com.willor.ktstockdata.common.parseDouble
-import com.willor.ktstockdata.common.parseInt
-import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.marketdata.dataobjects.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

@@ -1,9 +1,9 @@
-package com.willor.ktstockdata.historicaldata.charts.simplechart
+package com.willor.ktstockdata.historicchartdata.charts.simplechart
 
-import com.willor.ktstockdata.historicaldata.charts.StockChartBase
-import com.willor.ktstockdata.common.*
-
-import com.willor.ktstockdata.historicaldata.charts.advancedchart.AdvancedStockChart
+import com.willor.ktstockdata.common.Log
+import com.willor.ktstockdata.common.d
+import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
+import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
 import java.util.*
 
 

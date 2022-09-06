@@ -1,13 +1,13 @@
-package com.willor.ktstockdata.historicaldata
+package com.willor.ktstockdata.historicchartdata
 
 import com.google.gson.Gson
 import com.willor.ktstockdata.common.Log
 import com.willor.ktstockdata.common.NetworkClient
 import com.willor.ktstockdata.common.addParamsToUrl
 import com.willor.ktstockdata.common.d
-import com.willor.ktstockdata.historicaldata.charts.StockChartBase
-import com.willor.ktstockdata.historicaldata.charts.advancedchart.AdvancedStockChart
-import com.willor.ktstockdata.historicaldata.charts.simplechart.SimpleStockChart
+import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
+import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
+import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
 import com.willor.ktyfinance.yfinance.data_objects.responses.HistoryResponse
 import okhttp3.Request
 import okhttp3.Response
@@ -21,7 +21,7 @@ import java.util.*
  *
  * AdvancedStockChart - Contains data and useful getters + methods for technical analysis
  */
-class History: IHistory{
+class HistoricChartData: IHistoricChartData{
 
     private val baseUrl = "https://query2.finance.yahoo.com"
 

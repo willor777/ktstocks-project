@@ -1,13 +1,26 @@
 package com.willor.ktstockdata
 
-import com.willor.ktstockdata.historicaldata.History
+import com.willor.ktstockdata.historicchartdata.HistoricChartData
 import com.willor.ktstockdata.marketdata.MarketData
-import com.willor.ktstockdata.watchlistsdata.Watchlists
+import com.willor.ktstockdata.watchlistsdata.WatchlistData
 
 class KtStocks {
-    val history = History()
+    val historicChartData = HistoricChartData()
     val marketData = MarketData()
-    val watchlists = Watchlists()
+    val watchlistData = WatchlistData()
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

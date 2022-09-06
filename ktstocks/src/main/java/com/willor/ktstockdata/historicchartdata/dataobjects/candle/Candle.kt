@@ -1,4 +1,4 @@
-package com.willor.ktstockdata.historicaldata.dataobjects.candle
+package com.willor.ktstockdata.historicchartdata.dataobjects.candle
 
 import java.util.*
 

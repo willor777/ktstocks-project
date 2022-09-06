@@ -2,8 +2,6 @@ package com.willor.ktstockdata.common
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.InetSocketAddress
-import java.net.Proxy
 
 internal object NetworkClient {
 
