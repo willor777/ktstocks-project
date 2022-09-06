@@ -1,9 +1,10 @@
 
 /* -------------------- Step One -------------------- */
 
+```groovy
+
 //  !! Add this to your settings.gradle repositories block under dependencyResolutionManagement!!
 maven { url 'https://jitpack.io' }
-
 
 // Example
 dependencyResolutionManagement {
@@ -16,9 +17,16 @@ dependencyResolutionManagement {
     }
 }
 
+```
+
 /* -------------------- Step Two -------------------- */
+
+```groovy
 
 // Add the dependency
 dependencies{
     implementation 'com.github.willor777:ktstocks-project:<...latest-version...>'
 }
+
+```
+
