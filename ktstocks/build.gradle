@@ -11,9 +11,7 @@ java {
 
 dependencies {
     // OkHttp
-    api('com.squareup.okhttp3:okhttp:5.0.0-alpha.2'){
-        transitive(false)
-    }
+    api 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
 
     // Gson
     api 'com.google.code.gson:gson:2.9.1'
@@ -29,8 +27,8 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId 'com.github.willor777'
-            artifactId 'ktstockdatalib-shadowversion'
-            version '0.0.3-alpha'
+            artifactId 'ktstockdatalib'
+            version '0.0.5-alpha'
             from components.java
         }
     }
