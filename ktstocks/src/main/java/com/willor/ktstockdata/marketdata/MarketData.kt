@@ -1,11 +1,14 @@
 package com.willor.ktstockdata.marketdata
 
+import com.google.gson.Gson
 import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.common.NetworkClient
 import com.willor.ktstockdata.common.parseDouble
 import com.willor.ktstockdata.common.parseInt
 import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.marketdata.dataobjects.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
@@ -659,4 +662,57 @@ class MarketData: IMarketData {
         }
     }
 
+
+    /**
+     * Retrieves unusual stock option activity, defined by high volume to open interest ratio.
+     * Option volume that exceeds open interest signals new positions by institutional traders
+     */
+    override fun getUnusualOptionsActivity(pageNumber: Int): UnusualOptionsActivityPage? {
+
+        try{
+            val client = OkHttpClient().newBuilder()
+                .build()
+
+            val request: Request = Request.Builder()
+                // WARNING -- Don't ever increase the page size above 90.
+                // That is for "Premium" users of app.fdscanner.com
+                .url(
+                    "https://app.fdscanner.com/api2/unusualvolume?p=0&page_size=50&page=$pageNumber"
+                )
+                .get()
+                .addHeader("Accept", "*/*")
+                .addHeader("Accept-Language", "en-US,en;q=0.9")
+                .addHeader("Connection", "keep-alive")
+                .addHeader(
+                    "Cookie",
+                    "popupShown=Fri%20Sep%2002%202022%2012:18:43%20GMT-0400%20(Eastern%20Daylight%20Time)"
+                )
+                .addHeader("Referer", "https://app.fdscanner.com/unusualvolume")
+                .addHeader("Sec-Fetch-Dest", "empty")
+                .addHeader("Sec-Fetch-Mode", "cors")
+                .addHeader("Sec-Fetch-Site", "same-origin")
+                .addHeader(
+                    "User-Agent",
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+                )
+                .addHeader(
+                    "sec-ch-ua",
+                    "\"Chromium\";v=\"104\", \" Not A;Brand\";v=\"99\", \"Google Chrome\";v=\"104\""
+                )
+                .addHeader("sec-ch-ua-mobile", "?0")
+                .addHeader("sec-ch-ua-platform", "\"macOS\"")
+                .build()
+            val response = client.newCall(request).execute()
+
+            return if(response.isSuccessful){
+                Gson().fromJson(response.body!!.string(), UnusualOptionsActivityPage::class.java)
+            }else{
+                null
+            }
+
+        }catch (ex: Exception){
+            Log.d("EXCEPTION", ex.stackTraceToString())
+            return null
+        }
+    }
 }
