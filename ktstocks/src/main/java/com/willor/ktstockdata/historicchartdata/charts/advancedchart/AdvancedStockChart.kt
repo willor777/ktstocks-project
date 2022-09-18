@@ -1,8 +1,9 @@
 package com.willor.ktstockdata.historicchartdata.charts.advancedchart
 
+import com.willor.ktstockdata.common.Log
+import com.willor.ktstockdata.common.d
 import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
 import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
-import com.willor.ktstockdata.common.*
 import java.util.*
 import kotlin.math.abs
 

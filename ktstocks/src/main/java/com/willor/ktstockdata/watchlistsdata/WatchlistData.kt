@@ -1,6 +1,8 @@
 package com.willor.ktstockdata.watchlistsdata
 
-import com.willor.ktstockdata.common.*
+import com.willor.ktstockdata.common.NetworkClient
+import com.willor.ktstockdata.common.parseDouble
+import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Ticker
 import com.willor.ktstockdata.watchlistsdata.dataobjects.Watchlist
 import org.jsoup.Jsoup
@@ -225,6 +227,10 @@ class WatchlistData {
                 return getBioTechAndDrugStocks()
             }
         }
+    }
+
+    fun getAllWatchlistOptionsAsList(): List<WatchlistOptions>{
+        return WatchlistOptions.values().toList()
     }
 
     fun getGainers(): Watchlist? {
