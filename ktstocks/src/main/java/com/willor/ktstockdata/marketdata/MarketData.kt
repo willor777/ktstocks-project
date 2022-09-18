@@ -59,78 +59,83 @@ class MarketData: IMarketData {
 
 
     private fun scrapeYfQuote(ticker: String): Map<String, Map<String, String>?>?{
+        try{
+            // Responsible for scraping the top row data. Returns Map<String, String>
+            val scrapeTopRow = { doc: Document ->
+                val results = mutableMapOf<String, String>()
 
-        // Responsible for scraping the top row data. Returns Map<String, String>
-        val scrapeTopRow = { doc: Document ->
-            val results = mutableMapOf<String, String>()
+                val topRowElements = doc.select("div#quote-header-info")
 
-            val topRowElements = doc.select("div#quote-header-info")
+                // Set up place holders + pull easy data
+                val compName = topRowElements.select("h1").text()
+                var ppLastPrice = "0.0"
+                var ppChangeDol = "0.0"
+                var ppChangePct = "(0.0%)"
 
-            // Set up place holders + pull easy data
-            val compName = topRowElements.select("h1").text()
-            var ppLastPrice = "0.0"
-            var ppChangeDol = "0.0"
-            var ppChangePct = "(0.0%)"
+                // Pull the data
+                val rawDataElements = topRowElements.select("fin-streamer")
 
-            // Pull the data
-            val rawDataElements = topRowElements.select("fin-streamer")
-
-            // Build data
-            val data = mutableListOf<String>()
-            for (d in rawDataElements){
-                data.add(d.text())
-            }
-
-            // Regular market price info is always there
-            val regLastPrice = data[0]
-            val regChangeDol = data[1]
-            val regChangePct = data[2]
-
-            // After market is only there after / before market open/close
-            if (data.size >= 8){
-                ppLastPrice = data[6]
-                ppChangeDol = data[7]
-                ppChangePct = data[8]
-            }
-
-            // Build result dict
-            results["compName"] = compName; results["regLastPrice"] = regLastPrice
-            results["regChangeDol"] = regChangeDol; results["regChangePct"] = regChangePct
-            results["ppLastPrice"] = ppLastPrice; results["ppChangeDol"] = ppChangeDol
-            results["ppChangePct"] = ppChangePct
-
-            results.toMap()
-        }
-
-        // Responsible for scraping the body data. Returns Map<String, String>
-        val scrapeBody = { doc: Document ->
-            val results = mutableMapOf<String, String>()
-
-            val table = doc.select("div#quote-summary")
-            val rawDataRows = table.select("tr")
-
-            // Loop through the table rows and build dict
-            for (r in rawDataRows){
-                val data = r.select("td")
-                if (data.size == 2){
-                    results[data[0].text()] = data[1].text()
+                // Build data
+                val data = mutableListOf<String>()
+                for (d in rawDataElements){
+                    data.add(d.text())
                 }
+
+                // Regular market price info is always there
+                val regLastPrice = data[0]
+                val regChangeDol = data[1]
+                val regChangePct = data[2]
+
+                // After market is only there after / before market open/close
+                if (data.size >= 8){
+                    ppLastPrice = data[6]
+                    ppChangeDol = data[7]
+                    ppChangePct = data[8]
+                }
+
+                // Build result dict
+                results["compName"] = compName; results["regLastPrice"] = regLastPrice
+                results["regChangeDol"] = regChangeDol; results["regChangePct"] = regChangePct
+                results["ppLastPrice"] = ppLastPrice; results["ppChangeDol"] = ppChangeDol
+                results["ppChangePct"] = ppChangePct
+
+                results.toMap()
             }
 
-            results
+            // Responsible for scraping the body data. Returns Map<String, String>
+            val scrapeBody = { doc: Document ->
+                val results = mutableMapOf<String, String>()
+
+                val table = doc.select("div#quote-summary")
+                val rawDataRows = table.select("tr")
+
+                // Loop through the table rows and build dict
+                for (r in rawDataRows){
+                    val data = r.select("td")
+                    if (data.size == 2){
+                        results[data[0].text()] = data[1].text()
+                    }
+                }
+
+                results
+            }
+
+
+            val url = "https://finance.yahoo.com/quote/$ticker?p=$ticker&.tsrc=fin-srch"
+            val page = NetworkClient.getWebpage(url) ?: return null
+            val doc = Jsoup.parse(page)
+
+            // Base map
+            val payload = mutableMapOf<String, Map<String, String>?>()
+            payload["topRow"] = scrapeTopRow(doc)
+            payload["body"] = scrapeBody(doc)
+
+            return payload.toMap()
+            
+        } catch(e: Exception){
+            Log.d("EXCEPTION", e.stackTraceToString())
+            return null
         }
-
-
-        val url = "https://finance.yahoo.com/quote/$ticker?p=$ticker&.tsrc=fin-srch"
-        val page = NetworkClient.getWebpage(url) ?: return null
-        val doc = Jsoup.parse(page)
-
-        // Base map
-        val payload = mutableMapOf<String, Map<String, String>?>()
-        payload["topRow"] = scrapeTopRow(doc)
-        payload["body"] = scrapeBody(doc)
-
-        return payload.toMap()
     }
 
 
