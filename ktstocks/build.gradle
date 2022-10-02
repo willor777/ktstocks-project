@@ -30,7 +30,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.github.willor777'
             artifactId 'ktstockdatalib'
-            version '0.0.7-alpha'
+            version '1.0.0'
             from components.java
         }
     }
