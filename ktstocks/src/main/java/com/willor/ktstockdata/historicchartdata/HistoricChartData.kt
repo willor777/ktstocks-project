@@ -8,8 +8,11 @@ import com.willor.ktstockdata.common.d
 import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
 import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
 import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
-import com.willor.ktyfinance.yfinance.data_objects.responses.HistoryResponse
-import kotlinx.coroutines.*
+import com.willor.ktstockdata.historicchartdata.dataobjects.yfhistoryresp.HistoryResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import okhttp3.Request
 import okhttp3.Response
 import java.util.*
@@ -41,7 +44,7 @@ class HistoricChartData : IHistoricChartData {
             prepost
         ) ?: return null
 
-        if (interval == "1m"){
+        if (interval == "1m") {
             return formatOneMin(history, prepost, SimpleStockChart::class.java) as SimpleStockChart
         }
 
@@ -84,8 +87,12 @@ class HistoricChartData : IHistoricChartData {
             prepost
         ) ?: return null
 
-        if (interval == "1m"){
-            return formatOneMin(history, prepost, AdvancedStockChart::class.java) as AdvancedStockChart
+        if (interval == "1m") {
+            return formatOneMin(
+                history,
+                prepost,
+                AdvancedStockChart::class.java
+            ) as AdvancedStockChart
         }
 
         return AdvancedStockChart(
@@ -371,8 +378,8 @@ class HistoricChartData : IHistoricChartData {
             // Launch the Async Request
             val deferredReq: Deferred<Response> =
                 CoroutineScope(coroutineContext).async(Dispatchers.Unconfined) {
-                call.execute()
-            }
+                    call.execute()
+                }
 
             // Await it
             val resp = deferredReq.await()

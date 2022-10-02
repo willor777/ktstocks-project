@@ -6,7 +6,6 @@ import com.willor.ktstockdata.marketdata.dataobjects.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -15,8 +14,6 @@ import java.util.*
 import kotlin.coroutines.coroutineContext
 
 
-// TODO Improve Logging Messages -> Include Input Ticker + Fun name + Exception type + Stacktrace
-// TODO Finish writing docs
 class MarketData : IMarketData {
 
     private val tag: String = MarketData::class.java.simpleName
@@ -25,24 +22,24 @@ class MarketData : IMarketData {
     // Urls --------------------------------------------------------------------------------------
 
 
-    private val getSnrLevelsUrl = {tick: String ->
+    private val getSnrLevelsUrl = { tick: String ->
         "https://www.barchart.com/stocks/quotes/${tick.uppercase()}/overview"
     }
 
-    private val getYfQuoteUrl = {tick: String ->
+    private val getYfQuoteUrl = { tick: String ->
         val ticker = tick.uppercase()
         "https://finance.yahoo.com/quote/$ticker?p=$ticker&.tsrc=fin-srch"
     }
 
-    private val getOptionStatsUrl = {ticker: String ->
+    private val getOptionStatsUrl = { ticker: String ->
         "https://www.barchart.com/stocks/quotes/${ticker.uppercase()}/overview"
     }
 
-    private val getStocksCompetitorsUrl = {ticker: String ->
+    private val getStocksCompetitorsUrl = { ticker: String ->
         "https://www.marketwatch.com/investing/stock/$ticker?mod=search_symbol"
     }
 
-    private val getUnusualOptionsActivityUrl = {pageNum: Int ->
+    private val getUnusualOptionsActivityUrl = { pageNum: Int ->
         "https://app.fdscanner.com/api2/unusualvolume?p=0&page_size=50&page=$pageNum"
     }
 
@@ -86,7 +83,10 @@ class MarketData : IMarketData {
             }
             return uglyData
         } catch (e: Exception) {
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.d(
+                tag, "scrapeBarchartQuoteTable() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -167,7 +167,10 @@ class MarketData : IMarketData {
             return payload.toMap()
 
         } catch (e: Exception) {
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.d(
+                tag, "scrapeYfQuoteTable() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -176,7 +179,7 @@ class MarketData : IMarketData {
     /**
      * Parses the barchart.com quote page for Support and Resistance data.
      */
-    private fun parseSupportAndResistanceBarchartPage(page: String, ticker: String): SnRLevels?{
+    private fun parseSupportAndResistanceBarchartPage(page: String, ticker: String): SnRLevels? {
         try {
             // Get Document
             val tick = ticker.uppercase()
@@ -216,7 +219,10 @@ class MarketData : IMarketData {
                 fiftyTwoWeekLow = parseDouble(cleanValues[25])
             )
         } catch (e: Exception) {
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.d(
+                tag, "parseSnrBarchartPage() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -225,7 +231,7 @@ class MarketData : IMarketData {
     /**
      * Parses the finance.yahoo.com futures page.
      */
-    private fun parseFuturesData(page: String): MajorFuturesData?{
+    private fun parseFuturesData(page: String): MajorFuturesData? {
         try {
 
             val document: Document = Jsoup.parse(page)
@@ -263,7 +269,10 @@ class MarketData : IMarketData {
                 brentCrudeOilFuture = Future.createFromList(dataList[19])
             )
         } catch (e: Exception) {
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.d(
+                tag, "parseFuturesData() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
             return null
         }
 
@@ -353,7 +362,10 @@ class MarketData : IMarketData {
             )
 
         } catch (e: Exception) {
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.d(
+                tag, "parseMajorIndicesData() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -364,8 +376,8 @@ class MarketData : IMarketData {
      */
     private fun parseStockQuoteData(
         scrapeData: Map<String, Map<String, String>?>?, ticker: String
-    ): StockQuote?{
-        try{
+    ): StockQuote? {
+        try {
 
             val parseDateYF = { s: String ->
                 val result: Date?
@@ -459,10 +471,12 @@ class MarketData : IMarketData {
                 marketCapAbbreviatedString = bodyData["Market Cap"]!!
             )
 
-        }catch (e: Exception){
-            Log.d(tag, "Failed to parse $ticker quote page.\n" +
-                    "Exception: ${e.toString()}\n" +
-                    "Stacktrace: ${e.stackTraceToString()}")
+        } catch (e: Exception) {
+            Log.d(
+                tag, "parseStockQuoteData() failed to parse $ticker quote page.\n" +
+                        "Exception: $e\n" +
+                        "Stacktrace: ${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -473,15 +487,14 @@ class MarketData : IMarketData {
      */
     private fun parseEtfQuoteData(
         scrapeData: Map<String, Map<String, String>?>?, ticker: String
-    ): EtfQuote?{
-        try{
+    ): EtfQuote? {
+        try {
 
             val dateFromString = { s: String ->
-                val result: Date?
-                if (s.contains("N/A")) {
-                    result = null
+                val result: Date? = if (s.contains("N/A")) {
+                    null
                 } else {
-                    result = SimpleDateFormat("yyyy-MM-dd").parse(s)
+                    SimpleDateFormat("yyyy-MM-dd").parse(s)
                 }
                 result
             }
@@ -556,10 +569,12 @@ class MarketData : IMarketData {
                 inceptionDate = dateFromString(bodyData["Inception Date"]!!),
                 netAssetsAbbreviatedString = bodyData["Net Assets"]!!
             )
-        }catch (e: Exception){
-            Log.d(tag, "Failed to parse $ticker quote page. \n" +
-                    "Exception: ${e.toString()}\n" +
-                    "Stacktrace: ${e.stackTraceToString()}")
+        } catch (e: Exception) {
+            Log.d(
+                tag, "parseEtfQuoteData() failed to parse $ticker quote page. \n" +
+                        "Exception: $e\n" +
+                        "Stacktrace: ${e.stackTraceToString()}"
+            )
             return null
         }
     }
@@ -571,7 +586,7 @@ class MarketData : IMarketData {
     private fun parseOptionStats(
         scrapeData: List<List<String>>?,
         ticker: String
-    ): OptionStats?{
+    ): OptionStats? {
 
         try {
 
@@ -623,8 +638,8 @@ class MarketData : IMarketData {
             )
         } catch (e: Exception) {
             Log.d(
-                "EXCEPTION", "Ticker $ticker CAUSED AN EXCEPTION. FAILED TO OBTAIN " +
-                        "OPTION STATS\n" + e.stackTraceToString()
+                tag, "parseOptionsStats() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
             )
             return null
         }
@@ -634,7 +649,7 @@ class MarketData : IMarketData {
     /**
      * Parses a stock's Competitors data from marketwatch.com
      */
-    private fun parseStocksCompetitors(page: String, ticker: String): StockCompetitorsList? {
+    private fun parseStocksCompetitors(page: String): StockCompetitorsList? {
 
         try {
             // Used to extract company ticker from data
@@ -705,8 +720,8 @@ class MarketData : IMarketData {
             )
         } catch (e: Exception) {
             Log.d(
-                "EXCEPTION", "Ticker $ticker CAUSED AN EXCEPTION. FAILED TO OBTAIN" +
-                        " StockCompetitors List\n" + e.stackTraceToString()
+                tag, "parseStocksCompetitors() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
             )
             return null
         }
@@ -716,7 +731,7 @@ class MarketData : IMarketData {
     /**
      * Builds a request to retrieve data from
      */
-    private fun buildUoaRequest(pageNumber: Int): Request{
+    private fun buildUoaRequest(pageNumber: Int): Request {
 
         return Request.Builder()
             // WARNING -- Don't ever increase the page size above 90.
@@ -801,7 +816,7 @@ class MarketData : IMarketData {
 
     /**
      * Retrieves a StockQuote for stock symbol. Only usable with Stock Symbols. ETF Symbols
-     * are incompatable, use getEtfQuote() instead.
+     * are incompatible, use getEtfQuote() instead.
      */
     override fun getStockQuote(ticker: String): StockQuote? {
         val page = NetworkClient.getWebpage(
@@ -814,7 +829,7 @@ class MarketData : IMarketData {
 
     /**
      * Retrieves a EtfQuote for etf symbol. Only usable with ETF Symbols. Stock Symbols
-     * are incompatable, use getStockQuote() instead.
+     * are incompatible, use getStockQuote() instead.
      */
     override fun getEtfQuote(ticker: String): EtfQuote? {
         val page = NetworkClient.getWebpage(
@@ -844,7 +859,7 @@ class MarketData : IMarketData {
         val page = NetworkClient.getWebpage(
             getStocksCompetitorsUrl(ticker)
         ) ?: return null
-        return parseStocksCompetitors(page, ticker)
+        return parseStocksCompetitors(page)
     }
 
 
@@ -854,24 +869,24 @@ class MarketData : IMarketData {
      */
     override fun getUnusualOptionsActivity(pageNumber: Int): UnusualOptionsActivityPage? {
 
-        try {
+        return try {
 
             val response = NetworkClient.getClient()
                 .newCall(buildUoaRequest(pageNumber)).execute()
 
-            return if (response.isSuccessful) {
+            if (response.isSuccessful) {
                 Gson().fromJson(response.body!!.string(), UnusualOptionsActivityPage::class.java)
             } else {
                 null
             }
         } catch (ex: Exception) {
             Log.d("EXCEPTION", ex.stackTraceToString())
-            return null
+            null
         }
     }
 
 
-     // Async Methods -----------------------------------------------------------------------------
+    // Async Methods -----------------------------------------------------------------------------
 
     /**
      * Retrieves Support and Resistance Levels for ticker asynchronously.
@@ -920,7 +935,7 @@ class MarketData : IMarketData {
 
     /**
      * Asynchronously retrieves a EtfQuote for etf symbol. Only usable with ETF Symbols. Stock Symbols
-     * are incompatable, use getStockQuote() instead.
+     * are incompatible, use getStockQuote() instead.
      */
     override suspend fun getStockQuoteAsync(ticker: String): StockQuote? {
         val page = NetworkClient.getWebpageAsync(
@@ -933,7 +948,7 @@ class MarketData : IMarketData {
 
     /**
      * Asynchronously retrieves a EtfQuote for etf symbol. Only usable with ETF Symbols. Stock Symbols
-     * are incompatable, use getStockQuote() instead.
+     * are incompatible, use getStockQuote() instead.
      */
     override suspend fun getEtfQuoteAsync(ticker: String): EtfQuote? {
         val page = NetworkClient.getWebpageAsync(
@@ -963,7 +978,7 @@ class MarketData : IMarketData {
         val page = NetworkClient.getWebpageAsync(
             getStocksCompetitorsUrl(ticker)
         ) ?: return null
-        return parseStocksCompetitors(page, ticker)
+        return parseStocksCompetitors(page)
     }
 
 
@@ -975,10 +990,10 @@ class MarketData : IMarketData {
         try {
 
             val deferredResp = CoroutineScope(coroutineContext)
-                .async(Dispatchers.Unconfined){
+                .async(Dispatchers.Unconfined) {
                     NetworkClient.getClient()
                         .newCall(buildUoaRequest(pageNumber)).execute()
-            }
+                }
 
             val response = deferredResp.await()
 

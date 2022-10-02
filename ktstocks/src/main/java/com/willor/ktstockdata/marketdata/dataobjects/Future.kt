@@ -4,8 +4,6 @@ import com.willor.ktstockdata.common.parseDouble
 import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 
 
-// Symbol, Name, LastPrice, MarketTime, ChangeDollar, ChangePercent, Volume(IntAbbre), AvgVolu(IntAbbre)
-
 data class Future(
     val ticker: String,
     val nameAndExpiration: String,
@@ -16,7 +14,7 @@ data class Future(
     val volumeAvgThirtyDay: Long,
 ) {
     internal companion object {
-        fun createFromList(l: List<String>): Future? {
+        fun createFromList(l: List<String>): Future {
             return Future(
                 l[0],
                 l[1],

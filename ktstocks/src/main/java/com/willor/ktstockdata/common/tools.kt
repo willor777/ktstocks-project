@@ -63,7 +63,7 @@ internal fun parseDouble(str: String): Double {
             return 0.0
         }
 
-        var s = str.replace(" ", "")
+        val s = str.replace(" ", "")
         if (!(s[s.lastIndex].isDigit()) && s.contains("-")) {
             return 0.0
         }
@@ -87,8 +87,8 @@ internal fun parseDouble(str: String): Double {
 internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
 
     val spltNonDecimal = { s: String ->
-        var indexOne: String = ""
-        var indexTwo: String = ""
+        var indexOne = ""
+        var indexTwo = ""
 
         for (n in 0..s.lastIndex) {
             if (s[n].isDigit()) {
@@ -110,13 +110,13 @@ internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
             return s.replace(",", "").toLong()
         }
 
-        var splitString: MutableList<String>
+        val splitString: MutableList<String>
 
         // Check for non decimal abbreviated number
-        if (!s.contains(".")) {
-            splitString = spltNonDecimal(s)
+        splitString = if (!s.contains(".")) {
+            spltNonDecimal(s)
         } else {
-            splitString = s.split(".").toMutableList()
+            s.split(".").toMutableList()
 
         }
 

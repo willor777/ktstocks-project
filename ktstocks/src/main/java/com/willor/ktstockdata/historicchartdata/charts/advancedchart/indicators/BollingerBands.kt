@@ -15,11 +15,11 @@ import com.tictactec.ta.lib.MInteger
  * sma, ema, dema, tema, wma
  */
 class BollingerBands(
-    val inputData: List<Double>,
-    val window: Int = 20,
-    val maType: String = "sma",
-    val upperStdMultiplier: Double = 2.0,
-    val lowerStdMultiplier: Double = 2.0
+    inputData: List<Double>,
+    window: Int = 20,
+    maType: String = "sma",
+    upperStdMultiplier: Double = 2.0,
+    lowerStdMultiplier: Double = 2.0
 ) : IndicatorBase() {
 
     val upperBandValues: List<Double>
@@ -44,7 +44,7 @@ class BollingerBands(
             window,
             upperStdMultiplier,
             lowerStdMultiplier,
-            determineMAType(),
+            determineMAType(maType),
             MInteger(), MInteger(),
             outUpperArr,
             outMidArr,
@@ -56,7 +56,7 @@ class BollingerBands(
         lowerBandValues = fillMissingValues(outLowArr, inputData)
     }
 
-    private fun determineMAType(): MAType {
+    private fun determineMAType(maType: String): MAType {
         return when (maType.lowercase()) {
             "ema" -> {
                 MAType.Ema

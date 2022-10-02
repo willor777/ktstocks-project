@@ -3,10 +3,10 @@ package com.willor.ktstockdata.historicchartdata.charts.advancedchart.indicators
 import com.tictactec.ta.lib.MInteger
 
 class MACD(
-    val inputData: List<Double>,
-    val fastWindow: Int = 12,
-    val slowWindow: Int = 26,
-    val signalWindow: Int = 9,
+    inputData: List<Double>,
+    fastWindow: Int = 12,
+    slowWindow: Int = 26,
+    signalWindow: Int = 9,
 ) : IndicatorBase() {
 
     val lastIndex = inputData.lastIndex
@@ -45,18 +45,9 @@ class MACD(
             macdHistArr
         )
 
-        val zeroCount = macdArr.count { it == 0.0 }
-
-        println(zeroCount)
-
         macdValues = fillMissingValues(macdArr, inputData)
         macdSignalValues = fillMissingValues(macdSignalArr, inputData)
         macdHistValues = fillMissingValues(macdHistArr, inputData)
-
-        println(inputData.size)
-        println(macdValues.size)
-        println(macdSignalValues.size)
-        println(macdHistValues.size)
     }
 
     fun getMacdValueAtIndex(i: Int): Double {

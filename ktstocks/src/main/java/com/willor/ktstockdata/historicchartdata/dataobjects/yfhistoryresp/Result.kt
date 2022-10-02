@@ -1,4 +1,4 @@
-package com.willor.ktyfinance.yfinance.data_objects.responses
+package com.willor.ktstockdata.historicchartdata.dataobjects.yfhistoryresp
 
 
 import com.google.gson.annotations.SerializedName

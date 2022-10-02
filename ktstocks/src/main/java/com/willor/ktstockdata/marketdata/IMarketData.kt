@@ -27,7 +27,7 @@ interface IMarketData {
     /**
      * Async Requests
      */
-    
+
     suspend fun getSnrLevelsAsync(ticker: String): SnRLevels?
 
     suspend fun getFuturesDataAsync(): MajorFuturesData?
