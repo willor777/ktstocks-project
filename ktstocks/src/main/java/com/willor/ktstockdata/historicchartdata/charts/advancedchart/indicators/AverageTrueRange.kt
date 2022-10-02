@@ -6,7 +6,7 @@ import com.willor.ktstockdata.historicchartdata.dataobjects.candle.Candle
 class AverageTrueRange(
     inputData: List<Candle>,
     window: Int = 14
-): IndicatorBase(){
+) : IndicatorBase() {
 
     val lastIndex = inputData.lastIndex
     val size = inputData.size
@@ -26,7 +26,7 @@ class AverageTrueRange(
         val lowList = mutableListOf<Double>()
         val closeList = mutableListOf<Double>()
 
-        inputData.map{
+        inputData.map {
             highList.add(it.high)
             lowList.add(it.low)
             closeList.add(it.close)
@@ -47,13 +47,15 @@ class AverageTrueRange(
         values = fillMissingValues(outputArr, highList)
     }
 
-    fun getValueAtIndex(i: Int): Double{
+    fun getValueAtIndex(i: Int): Double {
         return values[findTrueIndex(i, values.lastIndex)]
     }
 
-    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return values.subList(findTrueIndex(startIndex, values.lastIndex),
-            findTrueIndex(endIndex, values.lastIndex) + 1)
+        return values.subList(
+            findTrueIndex(startIndex, values.lastIndex),
+            findTrueIndex(endIndex, values.lastIndex) + 1
+        )
     }
 }

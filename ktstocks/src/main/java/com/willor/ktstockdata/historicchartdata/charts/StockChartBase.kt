@@ -103,9 +103,9 @@ abstract class StockChartBase(
         )
     }
 
-    fun getSublistOfCandles(startIndex: Int, endIndex: Int): List<Candle>{
+    fun getSublistOfCandles(startIndex: Int, endIndex: Int): List<Candle> {
         val candles = mutableListOf<Candle>()
-        for (n in findTrueIndex(startIndex)..findTrueIndex(endIndex)){
+        for (n in findTrueIndex(startIndex)..findTrueIndex(endIndex)) {
             candles.add(getCandleAtIndex(n))
         }
 

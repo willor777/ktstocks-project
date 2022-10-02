@@ -7,7 +7,7 @@ class MACD(
     val fastWindow: Int = 12,
     val slowWindow: Int = 26,
     val signalWindow: Int = 9,
-): IndicatorBase() {
+) : IndicatorBase() {
 
     val lastIndex = inputData.lastIndex
     val size = inputData.size
@@ -15,7 +15,6 @@ class MACD(
     val macdValues: List<Double>          // Fast
     val macdSignalValues: List<Double>        // Slow
     val macdHistValues: List<Double>          // Reversals
-
 
 
     init {
@@ -26,7 +25,7 @@ class MACD(
             inputData.size,
             maxOf(fastWindow, slowWindow)
         ) - signalWindow + 1
-        
+
         val macdArr = DoubleArray(macdOutSize)
         val macdSignalArr = DoubleArray(macdOutSize)
         val macdHistArr = DoubleArray(macdOutSize)
@@ -46,7 +45,7 @@ class MACD(
             macdHistArr
         )
 
-        val zeroCount = macdArr.count{it == 0.0}
+        val zeroCount = macdArr.count { it == 0.0 }
 
         println(zeroCount)
 
@@ -60,34 +59,40 @@ class MACD(
         println(macdHistValues.size)
     }
 
-    fun getMacdValueAtIndex(i: Int): Double{
+    fun getMacdValueAtIndex(i: Int): Double {
         return macdValues[findTrueIndex(i, macdValues.lastIndex)]
     }
 
-    fun getSublistOfMacdValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfMacdValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return macdValues.subList(findTrueIndex(startIndex, macdValues.lastIndex),
-            findTrueIndex(endIndex, macdValues.lastIndex) + 1)
+        return macdValues.subList(
+            findTrueIndex(startIndex, macdValues.lastIndex),
+            findTrueIndex(endIndex, macdValues.lastIndex) + 1
+        )
     }
 
-    fun getMacdSignalValueAtIndex(i: Int): Double{
+    fun getMacdSignalValueAtIndex(i: Int): Double {
         return macdSignalValues[findTrueIndex(i, macdSignalValues.lastIndex)]
     }
 
-    fun getSublistOfMacdSignalValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfMacdSignalValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return macdSignalValues.subList(findTrueIndex(startIndex, macdSignalValues.lastIndex),
-            findTrueIndex(endIndex, macdSignalValues.lastIndex) + 1)
+        return macdSignalValues.subList(
+            findTrueIndex(startIndex, macdSignalValues.lastIndex),
+            findTrueIndex(endIndex, macdSignalValues.lastIndex) + 1
+        )
     }
 
-    fun getMacdHistValueAtIndex(i: Int): Double{
+    fun getMacdHistValueAtIndex(i: Int): Double {
         return macdHistValues[findTrueIndex(i, macdHistValues.lastIndex)]
     }
 
-    fun getSublistOfMacdHistValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfMacdHistValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return macdHistValues.subList(findTrueIndex(startIndex, macdHistValues.lastIndex),
-            findTrueIndex(endIndex, macdHistValues.lastIndex) + 1)
+        return macdHistValues.subList(
+            findTrueIndex(startIndex, macdHistValues.lastIndex),
+            findTrueIndex(endIndex, macdHistValues.lastIndex) + 1
+        )
     }
 }
 

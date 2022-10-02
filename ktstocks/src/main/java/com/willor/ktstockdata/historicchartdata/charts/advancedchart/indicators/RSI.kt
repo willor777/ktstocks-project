@@ -5,7 +5,7 @@ import com.tictactec.ta.lib.MInteger
 class RSI(
     val inputData: List<Double>,
     val window: Int = 14
-) : IndicatorBase(){
+) : IndicatorBase() {
 
     val size = inputData.size
     val lastIndex = inputData.lastIndex
@@ -31,13 +31,15 @@ class RSI(
 
     }
 
-    fun getValueAtIndex(i: Int): Double{
+    fun getValueAtIndex(i: Int): Double {
         return values[findTrueIndex(i, values.lastIndex)]
     }
 
-    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return values.subList(findTrueIndex(startIndex, values.lastIndex),
-            findTrueIndex(endIndex, values.lastIndex) + 1)
+        return values.subList(
+            findTrueIndex(startIndex, values.lastIndex),
+            findTrueIndex(endIndex, values.lastIndex) + 1
+        )
     }
 }

@@ -14,18 +14,18 @@ data class Future(
     val changePercent: Double,
     val volumeToday: Long,
     val volumeAvgThirtyDay: Long,
-){
-    internal companion object{
-        fun createFromList(l: List<String>): Future?{
-                return Future(
-                    l[0],
-                    l[1],
-                    parseDouble(l[2]),
-                    parseDouble(l[4]),
-                    parseDouble(l[5].substringBefore("%")),
-                    parseLongFromBigAbbreviatedNumbers(l[6]),
-                    parseLongFromBigAbbreviatedNumbers(l[7]),
-                    )
+) {
+    internal companion object {
+        fun createFromList(l: List<String>): Future? {
+            return Future(
+                l[0],
+                l[1],
+                parseDouble(l[2]),
+                parseDouble(l[4]),
+                parseDouble(l[5].substringBefore("%")),
+                parseLongFromBigAbbreviatedNumbers(l[6]),
+                parseLongFromBigAbbreviatedNumbers(l[7]),
+            )
         }
     }
 }

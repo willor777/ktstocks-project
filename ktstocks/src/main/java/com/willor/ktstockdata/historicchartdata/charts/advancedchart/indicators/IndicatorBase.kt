@@ -10,7 +10,7 @@ abstract class IndicatorBase {
 
     internal val talib = TaLibCore.getTaLibCore()
 
-    protected fun findTrueIndex(i: Int, lastIndexOfValues: Int): Int{
+    protected fun findTrueIndex(i: Int, lastIndexOfValues: Int): Int {
         return if (i < 0) {
             lastIndexOfValues + (i + 1)
         } else {
@@ -18,13 +18,14 @@ abstract class IndicatorBase {
         }
     }
 
-    protected fun fillMissingValues(outputData: DoubleArray, inputData: Collection<Double>
-    ): List<Double>{
+    protected fun fillMissingValues(
+        outputData: DoubleArray, inputData: Collection<Double>
+    ): List<Double> {
 
         val missingValues = inputData.size - outputData.size
 
         val finalData = mutableListOf<Double>()
-        for (n in 1..missingValues){
+        for (n in 1..missingValues) {
             finalData.add(0.0)
         }
 
@@ -33,11 +34,9 @@ abstract class IndicatorBase {
     }
 
 
-    protected fun calculateOutputArraySize(inputDataSize: Int, window: Int): Int{
+    protected fun calculateOutputArraySize(inputDataSize: Int, window: Int): Int {
         return inputDataSize - window + 1
     }
-
-
 
 
 }

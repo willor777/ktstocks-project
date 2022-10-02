@@ -60,7 +60,7 @@ class WatchlistData {
                     }
 
                     9 -> {
-                        if (!rowData[0].contains("-")){
+                        if (!rowData[0].contains("-")) {
                             returnValue = Ticker(
                                 ticker = rowData[0].replace(" ", ""),
                                 companyName = rowData[1],
@@ -73,7 +73,7 @@ class WatchlistData {
                             )
                         }
                     }
-                    else ->{
+                    else -> {
                         returnValue = null
                     }
                 }
@@ -113,31 +113,31 @@ class WatchlistData {
         return Watchlist(wlName, tickers)
     }
 
-    fun searchForByKeywords(vararg keywords: String): List<Watchlist>?{
+    fun searchForByKeywords(vararg keywords: String): List<Watchlist>? {
         val matches = mutableListOf<WatchlistOptions>()
 
-        for(w in WatchlistOptions.values()){
-            for (k in keywords){
-                if (w.name.contains(k.uppercase())){
+        for (w in WatchlistOptions.values()) {
+            for (k in keywords) {
+                if (w.name.contains(k.uppercase())) {
                     matches.add(w)
                 }
             }
         }
 
         val watchlistMatches = mutableListOf<Watchlist>()
-        matches.forEach{
-            getWatchlistByWatchlistOption(it)?.let{ wl ->
+        matches.forEach {
+            getWatchlistByWatchlistOption(it)?.let { wl ->
                 watchlistMatches.add(wl)
             }
         }
-        return if(watchlistMatches.isNotEmpty()){
+        return if (watchlistMatches.isNotEmpty()) {
             watchlistMatches.toList()
-        } else{
+        } else {
             null
         }
     }
 
-    fun getWatchlistByWatchlistOption(w: WatchlistOptions): Watchlist?{
+    fun getWatchlistByWatchlistOption(w: WatchlistOptions): Watchlist? {
         when (w) {
             WatchlistOptions.GAINERS -> {
                 return getGainers()
@@ -154,7 +154,7 @@ class WatchlistData {
             WatchlistOptions.MOST_ACTIVE_PENNY_STOCKS -> {
                 return getMostActivePennyStocks()
             }
-            WatchlistOptions.MOST_ACTIVE_SMALL_CAP_STOCKS-> {
+            WatchlistOptions.MOST_ACTIVE_SMALL_CAP_STOCKS -> {
                 return getMostActiveSmallCapStocks()
             }
             WatchlistOptions.MOST_BOUGHT_BY_ACTIVE_HEDGE_FUNDS -> {
@@ -166,70 +166,70 @@ class WatchlistData {
             WatchlistOptions.MOST_SOLD_BY_ACTIVE_HEDGE_FUNDS -> {
                 return getMostSoldByActiveHedgeFunds()
             }
-            WatchlistOptions.MOST_SOLD_BY_HEDGE_FUNDS-> {
+            WatchlistOptions.MOST_SOLD_BY_HEDGE_FUNDS -> {
                 return getMostSoldByHedgeFunds()
             }
-            WatchlistOptions.MOST_NEWLY_ADDED_TO_WATCHLISTS-> {
+            WatchlistOptions.MOST_NEWLY_ADDED_TO_WATCHLISTS -> {
                 return getMostNewlyAddedToWatchlists()
             }
-            WatchlistOptions.MOST_WATCHED_BY_RETAIL_TRADERS-> {
+            WatchlistOptions.MOST_WATCHED_BY_RETAIL_TRADERS -> {
                 return getMostWatchedByRetailTraders()
             }
-            WatchlistOptions.LARGEST_FIFTY_TWO_WEEK_GAINS-> {
+            WatchlistOptions.LARGEST_FIFTY_TWO_WEEK_GAINS -> {
                 return getLargestFiftyTwoWeekGains()
             }
-            WatchlistOptions.LARGEST_FIFTY_TWO_WEEK_LOSSES-> {
+            WatchlistOptions.LARGEST_FIFTY_TWO_WEEK_LOSSES -> {
                 return getLargestFiftyTwoWeekLosses()
             }
-            WatchlistOptions.RECENT_FIFTY_TWO_WEEK_HIGHS-> {
+            WatchlistOptions.RECENT_FIFTY_TWO_WEEK_HIGHS -> {
                 return getRecentFiftyTwoWeekHighs()
             }
-            WatchlistOptions.RECENT_FIFTY_TWO_WEEK_LOWS-> {
+            WatchlistOptions.RECENT_FIFTY_TWO_WEEK_LOWS -> {
                 return getRecentFiftyTwoWeekLows()
             }
-            WatchlistOptions.BIG_EARNINGS_MISSES-> {
+            WatchlistOptions.BIG_EARNINGS_MISSES -> {
                 return getBigEarningsMisses()
             }
-            WatchlistOptions.BIG_EARNINGS_BEATS-> {
+            WatchlistOptions.BIG_EARNINGS_BEATS -> {
                 return getBigEarningsBeats()
             }
-            WatchlistOptions.CHINA_TECH_AND_INTERNET_STOCKS-> {
+            WatchlistOptions.CHINA_TECH_AND_INTERNET_STOCKS -> {
                 return getChinaTechAndInternet()
             }
-            WatchlistOptions.E_COMMERCE_STOCKS-> {
+            WatchlistOptions.E_COMMERCE_STOCKS -> {
                 return getECommerceStocks()
             }
-            WatchlistOptions.CANNABIS_STOCKS-> {
+            WatchlistOptions.CANNABIS_STOCKS -> {
                 return getCannabisStocks()
             }
-            WatchlistOptions.SELF_DRIVING_CAR_STOCKS-> {
+            WatchlistOptions.SELF_DRIVING_CAR_STOCKS -> {
                 return getSelfDrivingCarStocks()
             }
-            WatchlistOptions.VIDEO_GAME_DEVELOPER_STOCKS-> {
+            WatchlistOptions.VIDEO_GAME_DEVELOPER_STOCKS -> {
                 return getVideoGameStocks()
             }
-            WatchlistOptions.BANKS_AND_FINANCIAL_SERVICES_STOCKS-> {
+            WatchlistOptions.BANKS_AND_FINANCIAL_SERVICES_STOCKS -> {
                 return getBankAndFinancialServicesStocks()
             }
-            WatchlistOptions.MEDICAL_DEVICE_AND_RESEARCH_STOCKS-> {
+            WatchlistOptions.MEDICAL_DEVICE_AND_RESEARCH_STOCKS -> {
                 return getSelfDrivingCarStocks()
             }
-            WatchlistOptions.SMART_MONEY_STOCKS-> {
+            WatchlistOptions.SMART_MONEY_STOCKS -> {
                 return getSmartMoneyStocks()
             }
-            WatchlistOptions.DIVIDEND_GROWTH_MARKET_LEADERS-> {
+            WatchlistOptions.DIVIDEND_GROWTH_MARKET_LEADERS -> {
                 return getDividendGrowthMarketLeaders()
             }
-            WatchlistOptions.BERKSHIRE_HATHAWAY_PORTFOLIO-> {
+            WatchlistOptions.BERKSHIRE_HATHAWAY_PORTFOLIO -> {
                 return getBerkshireHathawayPortfolio()
             }
-            WatchlistOptions.BIOTECH_AND_DRUG_STOCKS-> {
+            WatchlistOptions.BIOTECH_AND_DRUG_STOCKS -> {
                 return getBioTechAndDrugStocks()
             }
         }
     }
 
-    fun getAllWatchlistOptionsAsList(): List<WatchlistOptions>{
+    fun getAllWatchlistOptionsAsList(): List<WatchlistOptions> {
         return WatchlistOptions.values().toList()
     }
 
@@ -288,7 +288,7 @@ class WatchlistData {
         )
     }
 
-    fun getMostSoldByHedgeFunds(): Watchlist?{
+    fun getMostSoldByHedgeFunds(): Watchlist? {
         return processYfWatchlistScrape(
             "https://finance.yahoo.com/u/yahoo-finance/watchlists/m" +
                     "ost-sold-by-hedge-funds"
@@ -345,7 +345,7 @@ class WatchlistData {
 
     }
 
-    fun getBigEarningsBeats(): Watchlist?{
+    fun getBigEarningsBeats(): Watchlist? {
         return processYfWatchlistScrape(
             "https://finance.yahoo.com/u/yahoo-finance/" +
                     "watchlists/earnings-beat"
@@ -423,12 +423,11 @@ class WatchlistData {
         )
     }
 
-    fun getBioTechAndDrugStocks(): Watchlist?{
+    fun getBioTechAndDrugStocks(): Watchlist? {
         return processYfWatchlistScrape(
             "https://finance.yahoo.com/u/yahoo-finance/watchlists/biotech-and-drug-stocks"
         )
     }
-
 
 
 }

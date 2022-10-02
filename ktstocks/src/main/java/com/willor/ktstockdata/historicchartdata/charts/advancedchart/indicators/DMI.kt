@@ -6,7 +6,7 @@ import com.willor.ktstockdata.historicchartdata.dataobjects.candle.Candle
 class DMI(
     val inputData: List<Candle>,
     val window: Int = 14
-): IndicatorBase(){
+) : IndicatorBase() {
 
     val size = inputData.size
     val lastIndex = inputData.lastIndex
@@ -28,7 +28,7 @@ class DMI(
         val lowData = mutableListOf<Double>()
         val closeData = mutableListOf<Double>()
 
-        inputData.map{
+        inputData.map {
             highData.add(it.high)
             lowData.add(it.low)
             closeData.add(it.close)
@@ -66,41 +66,47 @@ class DMI(
             MInteger(), MInteger(),
             outAdx
         )
-        
+
         posDiValues = fillMissingValues(outPosDI, highData)
         negDiValues = fillMissingValues(outNegDI, lowData)
         adxValues = fillMissingValues(outAdx, highData)
 
     }
 
-    fun getPosDiValueAtIndex(i: Int): Double{
+    fun getPosDiValueAtIndex(i: Int): Double {
         return posDiValues[findTrueIndex(i, posDiValues.lastIndex)]
     }
 
-    fun getSublistOfPosDiValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfPosDiValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return posDiValues.subList(findTrueIndex(startIndex, posDiValues.lastIndex),
-            findTrueIndex(endIndex, posDiValues.lastIndex) + 1)
+        return posDiValues.subList(
+            findTrueIndex(startIndex, posDiValues.lastIndex),
+            findTrueIndex(endIndex, posDiValues.lastIndex) + 1
+        )
     }
 
-    fun getNegDiValueAtIndex(i: Int): Double{
+    fun getNegDiValueAtIndex(i: Int): Double {
         return negDiValues[findTrueIndex(i, negDiValues.lastIndex)]
     }
 
-    fun getSublistOfNegDiValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfNegDiValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return negDiValues.subList(findTrueIndex(startIndex, negDiValues.lastIndex),
-            findTrueIndex(endIndex, negDiValues.lastIndex) + 1)
+        return negDiValues.subList(
+            findTrueIndex(startIndex, negDiValues.lastIndex),
+            findTrueIndex(endIndex, negDiValues.lastIndex) + 1
+        )
     }
 
-    fun getAdxValueAtIndex(i: Int): Double{
+    fun getAdxValueAtIndex(i: Int): Double {
         return adxValues[findTrueIndex(i, adxValues.lastIndex)]
     }
 
-    fun getSublistOfAdxValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfAdxValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return adxValues.subList(findTrueIndex(startIndex, adxValues.lastIndex),
-            findTrueIndex(endIndex, adxValues.lastIndex) + 1)
+        return adxValues.subList(
+            findTrueIndex(startIndex, adxValues.lastIndex),
+            findTrueIndex(endIndex, adxValues.lastIndex) + 1
+        )
     }
 }
 

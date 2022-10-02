@@ -19,4 +19,18 @@ interface IHistoricChartData {
         periodRange: String = "5d",
         prepost: Boolean = true
     ): AdvancedStockChart?
+
+    suspend fun getHistoryAsSimpleStockChartAsync(
+        ticker: String,
+        interval: String = "5m",
+        periodRange: String = "5d",
+        prepost: Boolean = true
+    ): SimpleStockChart?
+
+    suspend fun getHistoryAsAdvancedStockChartAsync(
+        ticker: String,
+        interval: String = "5m",
+        periodRange: String = "5d",
+        prepost: Boolean = true
+    ): AdvancedStockChart?
 }

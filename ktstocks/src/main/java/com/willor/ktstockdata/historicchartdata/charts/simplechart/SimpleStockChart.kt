@@ -22,7 +22,7 @@ class SimpleStockChart(
     low: List<Double>,
     close: List<Double>,
     volume: List<Int>
-): StockChartBase(
+) : StockChartBase(
     ticker = ticker,
     interval = interval,
     periodRange = periodRange,
@@ -34,7 +34,7 @@ class SimpleStockChart(
     low = low,
     close = close,
     volume = volume
-){
+) {
     companion object {
 
         fun fromAdvancedStockChart(c: AdvancedStockChart): SimpleStockChart? {

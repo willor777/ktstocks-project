@@ -5,19 +5,19 @@ import com.willor.ktstockdata.historicchartdata.dataobjects.candle.Candle
 
 class ParabolicSAR(
     val inputData: List<Candle>,
-): IndicatorBase(){
+) : IndicatorBase() {
 
     val lastIndex = inputData.lastIndex
     val size = inputData.size
     val values: List<Double>
 
-    init{
+    init {
 
         val outArr = DoubleArray(size - 1)
 
         val highData = mutableListOf<Double>()
         val lowData = mutableListOf<Double>()
-        inputData.map{
+        inputData.map {
             highData.add(it.high)
             lowData.add(it.low)
         }
@@ -39,13 +39,15 @@ class ParabolicSAR(
     }
 
 
-    fun getValueAtIndex(i: Int): Double{
+    fun getValueAtIndex(i: Int): Double {
         return values[findTrueIndex(i, values.lastIndex)]
     }
 
-    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return values.subList(findTrueIndex(startIndex, values.lastIndex),
-            findTrueIndex(endIndex, values.lastIndex) + 1)
+        return values.subList(
+            findTrueIndex(startIndex, values.lastIndex),
+            findTrueIndex(endIndex, values.lastIndex) + 1
+        )
     }
 }

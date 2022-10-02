@@ -28,7 +28,7 @@ class AdvancedStockChart(
     low: List<Double>,
     close: List<Double>,
     volume: List<Int>,
-): StockChartBase(
+) : StockChartBase(
     ticker = ticker,
     interval = interval,
     periodRange = periodRange,
@@ -40,14 +40,16 @@ class AdvancedStockChart(
     low = low,
     close = close,
     volume = volume,
-){
+) {
 
-    companion object{
-        fun createFromSimpleStockChart(s: SimpleStockChart): AdvancedStockChart?{
+    companion object {
+        fun createFromSimpleStockChart(s: SimpleStockChart): AdvancedStockChart? {
 
-            return try{
-                AdvancedStockChart(s.ticker, s.interval, s.periodRange, s.prepost, s.datetime, s.timestamp,
-            s.open, s.high, s.low, s.close, s.volume)
+            return try {
+                AdvancedStockChart(
+                    s.ticker, s.interval, s.periodRange, s.prepost, s.datetime, s.timestamp,
+                    s.open, s.high, s.low, s.close, s.volume
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.d("DEBUG", e.stackTraceToString())
@@ -57,7 +59,7 @@ class AdvancedStockChart(
     }
 
 
-    fun getSliceChartAsAdvancedStockChart(startIndex: Int, endIndex: Int): AdvancedStockChart{
+    fun getSliceChartAsAdvancedStockChart(startIndex: Int, endIndex: Int): AdvancedStockChart {
         return AdvancedStockChart(
             ticker,
             interval,
@@ -77,7 +79,7 @@ class AdvancedStockChart(
     /**
      * Calculates the size of candle from High to Low for given index.
      */
-    fun getCandleHighToLowMeasurement(index: Int): Double{
+    fun getCandleHighToLowMeasurement(index: Int): Double {
         val c = getCandleAtIndex(index)
         return c.high - c.low
     }
@@ -86,7 +88,7 @@ class AdvancedStockChart(
     /**
      * Calculates the size of candle's body for given index using abs(candle.open - candle.close)
      */
-    fun getCandleBodyMeasurement(index: Int): Double{
+    fun getCandleBodyMeasurement(index: Int): Double {
         val c = getCandleAtIndex(index)
         return abs(c.open - c.close)
     }
@@ -101,15 +103,15 @@ class AdvancedStockChart(
      *      - "B" : close == open
      *
      */
-    fun getCandleColorAsGorRorB(index: Int): String{
+    fun getCandleColorAsGorRorB(index: Int): String {
 
         val c = getCandleAtIndex(index)
 
-        return if(c.close > c.open){
+        return if (c.close > c.open) {
             "G"
-        }else if (c.close < c.open){
+        } else if (c.close < c.open) {
             "R"
-        }else{
+        } else {
             "B"
         }
     }
@@ -119,7 +121,7 @@ class AdvancedStockChart(
      * Calculates the Average Candle (High - Low) for the specified window ending
      * at the given index.
      */
-    fun getAvgCandleHighToLow(index: Int, window: Int): Double{
+    fun getAvgCandleHighToLow(index: Int, window: Int): Double {
 
         // Determine actual END index (even a negative value)
         val trueEndIndex = findTrueIndex(index)
@@ -127,14 +129,14 @@ class AdvancedStockChart(
         // Determine start index
         var startIndex = trueEndIndex - window
         var trueWindow = window
-        if (startIndex < 0){
+        if (startIndex < 0) {
             startIndex = 0
             trueWindow = trueEndIndex + 1
         }
 
         // Calculate avg for window
         var total = 0.0
-        for (n in startIndex..trueEndIndex){
+        for (n in startIndex..trueEndIndex) {
             total += getCandleHighToLowMeasurement(n)
         }
 
@@ -146,21 +148,21 @@ class AdvancedStockChart(
      * Calculates the Average Candle (abs(open - close)) for the specified window ending
      * at the given index
      */
-    fun getAvgCandleBody(index: Int, window: Int): Double{
+    fun getAvgCandleBody(index: Int, window: Int): Double {
         // Find true end Index even with negative index value
         val trueEndIndex = findTrueIndex(index)
 
         // Determine start index / true window...aka check for < 0 start index
         var startIndex = trueEndIndex - window
         var trueWindow = window
-        if (startIndex < 0){
+        if (startIndex < 0) {
             startIndex = 0
             trueWindow = trueEndIndex + 1
         }
 
         // Calculate avg for window
         var total = 0.0
-        for (n in startIndex..trueEndIndex){
+        for (n in startIndex..trueEndIndex) {
             total += getCandleBodyMeasurement(n)
         }
         return total / trueWindow
@@ -170,12 +172,12 @@ class AdvancedStockChart(
     /**
      * Returns True if green candle closed within 10% of it's high
      */
-    fun closedAtHigh(index: Int): Boolean{
+    fun closedAtHigh(index: Int): Boolean {
 
         val c = getCandleAtIndex(index)
 
         // Make sure it's a green candle
-        if (c.close < c.open){
+        if (c.close < c.open) {
             return false
         }
 
@@ -186,12 +188,12 @@ class AdvancedStockChart(
     /**
      * Returns True if red candle closed within 10% of it's low
      */
-    fun closedAtLow(index: Int): Boolean{
+    fun closedAtLow(index: Int): Boolean {
 
         val c = getCandleAtIndex(index)
 
         // Make sure candle is red
-        if (c.close > c.open){
+        if (c.close > c.open) {
             return false
         }
 
@@ -202,14 +204,13 @@ class AdvancedStockChart(
     /**
      * Returns the Head size as a percentage of total size
      */
-    fun getHeadSizeAsPercentageOfTotalSize(index: Int): Double{
+    fun getHeadSizeAsPercentageOfTotalSize(index: Int): Double {
         val c = getCandleAtIndex(index)
 
-        return if (c.close > c.open){
+        return if (c.close > c.open) {
 
             (c.high - c.close) / (c.high - c.low)
-        }
-        else {
+        } else {
             (c.high - c.open) / (c.high - c.low)
         }
 
@@ -219,13 +220,12 @@ class AdvancedStockChart(
     /**
      * Returns the Tail size as percentage of total size
      */
-    fun getTailSizeAsPercentageOfTotalSize(index: Int): Double{
+    fun getTailSizeAsPercentageOfTotalSize(index: Int): Double {
         val c = getCandleAtIndex(index)
 
-        return if (c.close < c.open){
+        return if (c.close < c.open) {
             (c.close - c.low) / (c.high - c.low)
-        }
-        else{
+        } else {
             (c.open - c.low) / (c.high - c.low)
         }
     }
@@ -234,7 +234,7 @@ class AdvancedStockChart(
     /**
      * Returns the Body size as percentage of total size
      */
-    fun getBodySizeAsPercentageOfTotalSize(index: Int): Double{
+    fun getBodySizeAsPercentageOfTotalSize(index: Int): Double {
         val c = getCandleAtIndex(index)
 
         return abs(c.close - c.open) / (c.high - c.low)
@@ -244,7 +244,7 @@ class AdvancedStockChart(
     /**
      * Returns the Percentage Difference of current body size vrs avg body size
      */
-    fun getBodySizeVrsAvgBodyAsPercentage(index: Int, window: Int): Double{
+    fun getBodySizeVrsAvgBodyAsPercentage(index: Int, window: Int): Double {
         val targetCandle = getCandleBodyMeasurement(index)
         val avgCandle = getAvgCandleBody(index, window)
 
@@ -255,7 +255,7 @@ class AdvancedStockChart(
     /**
      * Returns the Percentage Difference of current High to Low size vrs avg High to Low
      */
-    fun getHighToLowSizeVrsAvgHighToLowAsPercentage(index: Int, window: Int): Double{
+    fun getHighToLowSizeVrsAvgHighToLowAsPercentage(index: Int, window: Int): Double {
         val targetCandle = getCandleHighToLowMeasurement(index)
         val avgHighToLow = getAvgCandleHighToLow(index, window)
 
@@ -266,7 +266,7 @@ class AdvancedStockChart(
     /**
      * Returns true if candle is Green
      */
-    fun isGreenCandle(index: Int): Boolean{
+    fun isGreenCandle(index: Int): Boolean {
 
         return when (getCandleColorAsGorRorB(index)) {
             "G" -> {
@@ -282,8 +282,8 @@ class AdvancedStockChart(
     /**
      * Returns true if candle is Red
      */
-    fun isRedCandle(index: Int): Boolean{
-        return when (getCandleColorAsGorRorB(index)){
+    fun isRedCandle(index: Int): Boolean {
+        return when (getCandleColorAsGorRorB(index)) {
             "R" -> {
                 true
             }
@@ -297,7 +297,7 @@ class AdvancedStockChart(
     /**
      * Checks if candle is above average body size
      */
-    fun isAboveAvgBodySize(index: Int, windowForAvg: Int = 5): Boolean{
+    fun isAboveAvgBodySize(index: Int, windowForAvg: Int = 5): Boolean {
         val candle = getCandleAtIndex(index)
 
         return getCandleBodyMeasurement(index) > getAvgCandleBody(index, windowForAvg)
@@ -307,7 +307,7 @@ class AdvancedStockChart(
     /**
      * Check if candle is above average high to low size
      */
-    fun isAboveAvgHighToLowSize(index: Int, windowForAvg: Int = 5): Boolean{
+    fun isAboveAvgHighToLowSize(index: Int, windowForAvg: Int = 5): Boolean {
         return getCandleHighToLowMeasurement(index) > getAvgCandleHighToLow(index, windowForAvg)
     }
 
@@ -315,7 +315,7 @@ class AdvancedStockChart(
     /**
      * Returns true if candle has is Green + no Tail + no Head + is Above Avg Body Size for span
      */
-    fun isFullBody(index: Int): Boolean{
+    fun isFullBody(index: Int): Boolean {
         return getHeadSizeAsPercentageOfTotalSize(index) < .05 &&
                 getTailSizeAsPercentageOfTotalSize(index) < .05
     }
@@ -324,20 +324,20 @@ class AdvancedStockChart(
     /**
      * Returns true if candle is < 50% size of avg body, with both Head & Tail > 50% avg body
      */
-    fun isPinBar(index: Int, windowForAvg: Int = 5): Boolean{
+    fun isPinBar(index: Int, windowForAvg: Int = 5): Boolean {
         val halfAvgBody = getAvgCandleBody(index, windowForAvg) * .5
 
         val head = getHeadSizeAsPercentageOfTotalSize(index)
-        if (head < halfAvgBody){
+        if (head < halfAvgBody) {
             return false
         }
 
         val tail = getTailSizeAsPercentageOfTotalSize(index)
-        if (tail < halfAvgBody){
+        if (tail < halfAvgBody) {
             return false
         }
 
-        if (getCandleBodyMeasurement(index) > halfAvgBody){
+        if (getCandleBodyMeasurement(index) > halfAvgBody) {
             return false
         }
 
@@ -348,15 +348,15 @@ class AdvancedStockChart(
     /**
      * Returns true if candle is Top Body Hammer. (Small Body + No Head + Big Tail)
      */
-    fun isTopBodyHammer(index: Int): Boolean{
+    fun isTopBodyHammer(index: Int): Boolean {
 
         // Closed at/near high (.05%)
-        if (!closedAtHigh(index)){
+        if (!closedAtHigh(index)) {
             return false
         }
 
         // If big tail, return true
-        if (getTailSizeAsPercentageOfTotalSize(index) > .5){
+        if (getTailSizeAsPercentageOfTotalSize(index) > .5) {
             return true
         }
 
@@ -367,15 +367,15 @@ class AdvancedStockChart(
     /**
      * Returns true if candle is Bottom Body Hammer. (Small Body + No Tail + Big Head)
      */
-    fun isBottomBodyHammer(index: Int): Boolean{
+    fun isBottomBodyHammer(index: Int): Boolean {
 
         // Closed at/near low (.05%)
-        if (!closedAtLow(index)){
+        if (!closedAtLow(index)) {
             return false
         }
 
         // If big head, return true
-        if (getHeadSizeAsPercentageOfTotalSize(index) > .5){
+        if (getHeadSizeAsPercentageOfTotalSize(index) > .5) {
             return true
         }
 

@@ -5,7 +5,7 @@ import com.tictactec.ta.lib.MInteger
 class EMA(
     val inputData: List<Double>,
     val window: Int
-): IndicatorBase(){
+) : IndicatorBase() {
 
     val values: List<Double>
     val lastIndex = inputData.lastIndex
@@ -16,8 +16,9 @@ class EMA(
 
         val outArr = DoubleArray(size)
 
-        talib.ema(0, inputData.lastIndex,
-        inputData.toDoubleArray(),
+        talib.ema(
+            0, inputData.lastIndex,
+            inputData.toDoubleArray(),
             window,
             MInteger(),
             MInteger(),
@@ -27,13 +28,15 @@ class EMA(
         values = fillMissingValues(outArr, inputData)
     }
 
-    fun getValueAtIndex(i: Int): Double{
+    fun getValueAtIndex(i: Int): Double {
         return values[findTrueIndex(i, values.lastIndex)]
     }
 
-    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return values.subList(findTrueIndex(startIndex, values.lastIndex),
-            findTrueIndex(endIndex, values.lastIndex) + 1)
+        return values.subList(
+            findTrueIndex(startIndex, values.lastIndex),
+            findTrueIndex(endIndex, values.lastIndex) + 1
+        )
     }
 }

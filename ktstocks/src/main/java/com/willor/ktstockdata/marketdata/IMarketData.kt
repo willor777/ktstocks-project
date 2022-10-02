@@ -4,8 +4,11 @@ import com.willor.ktstockdata.marketdata.dataobjects.*
 
 interface IMarketData {
 
+    /**
+     * Synchronous Requests
+     */
 
-    fun getSupportAndResistanceFromBarchartDotCom(ticker: String): SnRLevels?
+    fun getSnrLevels(ticker: String): SnRLevels?
 
     fun getFuturesData(): MajorFuturesData?
 
@@ -13,11 +16,31 @@ interface IMarketData {
 
     fun getStockQuote(ticker: String): StockQuote?
 
-    fun getETFQuote(ticker: String): EtfQuote?
+    fun getEtfQuote(ticker: String): EtfQuote?
 
     fun getOptionStats(ticker: String): OptionStats?
 
     fun getStocksCompetitors(ticker: String): StockCompetitorsList?
 
-    fun getUnusualOptionsActivity(pageNumber: Int): UnusualOptionsActivityPage?
+    fun getUnusualOptionsActivity(pageNumber: Int = 0): UnusualOptionsActivityPage?
+
+    /**
+     * Async Requests
+     */
+    
+    suspend fun getSnrLevelsAsync(ticker: String): SnRLevels?
+
+    suspend fun getFuturesDataAsync(): MajorFuturesData?
+
+    suspend fun getMajorIndicesDataAsync(): MajorIndicesData?
+
+    suspend fun getStockQuoteAsync(ticker: String): StockQuote?
+
+    suspend fun getEtfQuoteAsync(ticker: String): EtfQuote?
+
+    suspend fun getOptionStatsAsync(ticker: String): OptionStats?
+
+    suspend fun getStocksCompetitorsAsync(ticker: String): StockCompetitorsList?
+
+    suspend fun getUnusualOptionsActivityAsync(pageNumber: Int = 0): UnusualOptionsActivityPage?
 }

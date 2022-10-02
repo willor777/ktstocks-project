@@ -20,7 +20,7 @@ class BollingerBands(
     val maType: String = "sma",
     val upperStdMultiplier: Double = 2.0,
     val lowerStdMultiplier: Double = 2.0
-): IndicatorBase(){
+) : IndicatorBase() {
 
     val upperBandValues: List<Double>
     val middleBandValues: List<Double>
@@ -49,64 +49,70 @@ class BollingerBands(
             outUpperArr,
             outMidArr,
             outLowArr
-            )
+        )
 
         upperBandValues = fillMissingValues(outUpperArr, inputData)
         middleBandValues = fillMissingValues(outMidArr, inputData)
         lowerBandValues = fillMissingValues(outLowArr, inputData)
     }
 
-    private fun determineMAType(): MAType{
-        return when(maType.lowercase()){
-            "ema" ->{
+    private fun determineMAType(): MAType {
+        return when (maType.lowercase()) {
+            "ema" -> {
                 MAType.Ema
             }
 
-            "dema" ->{
+            "dema" -> {
                 MAType.Dema
             }
 
-            "tema" ->{
+            "tema" -> {
                 MAType.Tema
             }
 
-            "wma" ->{
+            "wma" -> {
                 MAType.Wma
             }
 
-            else ->{
+            else -> {
                 MAType.Sma
             }
         }
     }
 
-    fun getUpperValueAtIndex(i: Int): Double{
+    fun getUpperValueAtIndex(i: Int): Double {
         return upperBandValues[findTrueIndex(i, upperBandValues.lastIndex)]
     }
 
-    fun getSublistOfUpperBandValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfUpperBandValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return upperBandValues.subList(findTrueIndex(startIndex, upperBandValues.lastIndex),
-            findTrueIndex(endIndex, upperBandValues.lastIndex) + 1)
+        return upperBandValues.subList(
+            findTrueIndex(startIndex, upperBandValues.lastIndex),
+            findTrueIndex(endIndex, upperBandValues.lastIndex) + 1
+        )
     }
 
-    fun getMiddleValueAtIndex(i: Int): Double{
+    fun getMiddleValueAtIndex(i: Int): Double {
         return middleBandValues[findTrueIndex(i, middleBandValues.lastIndex)]
     }
 
-    fun getSublistOfMiddleBandValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfMiddleBandValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return middleBandValues.subList(findTrueIndex(startIndex, middleBandValues.lastIndex),
-            findTrueIndex(endIndex, middleBandValues.lastIndex) + 1)
+        return middleBandValues.subList(
+            findTrueIndex(startIndex, middleBandValues.lastIndex),
+            findTrueIndex(endIndex, middleBandValues.lastIndex) + 1
+        )
     }
 
-    fun getLowerValueAtIndex(i: Int): Double{
+    fun getLowerValueAtIndex(i: Int): Double {
         return lowerBandValues[findTrueIndex(i, lowerBandValues.lastIndex)]
     }
 
-    fun getSublistOfLowerBandValues(startIndex: Int, endIndex: Int): List<Double>{
+    fun getSublistOfLowerBandValues(startIndex: Int, endIndex: Int): List<Double> {
 
-        return lowerBandValues.subList(findTrueIndex(startIndex, lowerBandValues.lastIndex),
-            findTrueIndex(endIndex, lowerBandValues.lastIndex) + 1)
+        return lowerBandValues.subList(
+            findTrueIndex(startIndex, lowerBandValues.lastIndex),
+            findTrueIndex(endIndex, lowerBandValues.lastIndex) + 1
+        )
     }
 }
