@@ -527,10 +527,11 @@ class HistoricChartData : IHistoricChartData {
      */
     private fun removeNullValuesFromDoublesList(l: List<Double?>): List<Double> {
 
+
         val newList = mutableListOf<Double>()
         l.forEach {
             if (it == null) {
-                newList.add(0.0)
+                newList.add(l.random() ?: 0.0)
             } else {
                 newList.add(it)
             }
@@ -546,7 +547,7 @@ class HistoricChartData : IHistoricChartData {
         val newList = mutableListOf<Int>()
         l.forEach {
             if (it == null) {
-                newList.add(0)
+                newList.add(l.random() ?: 0)
             } else {
                 newList.add(it)
             }
