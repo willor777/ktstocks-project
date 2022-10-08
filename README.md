@@ -5,19 +5,10 @@
 Step 1.
 
 ```groovy
-//  !! Add this to your settings.gradle repositories block under dependencyResolutionManagement!!
+//  Add jitpack.io to your repositories
 maven { url 'https://jitpack.io' }
 
-// Example
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-        repositories {
-            google()
-            mavenCentral()
 
-            maven { url 'https://jitpack.io' }
-    }
-}
 ```
 
 Step 2.
@@ -30,9 +21,10 @@ dependencies{
 ```
 
 
-<h1>Usage</h1>
+<h1>Basic Usage</h1>
 
 ```kotlin
+
 
     // The wrapper class is a composite type (Classes can also be accessed individually)
     val ktStocks = KtStocks()
