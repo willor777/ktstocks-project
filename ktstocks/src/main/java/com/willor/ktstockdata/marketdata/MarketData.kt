@@ -3,6 +3,7 @@ package com.willor.ktstockdata.marketdata
 import com.google.gson.Gson
 import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.marketdata.dataobjects.*
+import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOptionsActivityPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -875,7 +876,9 @@ class MarketData : IMarketData {
                 .newCall(buildUoaRequest(pageNumber)).execute()
 
             if (response.isSuccessful) {
-                Gson().fromJson(response.body!!.string(), UnusualOptionsActivityPage::class.java)
+                val rawRespObj = gson.fromJson(response.body!!.string(),
+                    RawUnusualOptionsActivityPage::class.java)
+                rawRespObj.toUnusualOptionsActivityPage()
             } else {
                 null
             }
@@ -998,7 +1001,10 @@ class MarketData : IMarketData {
             val response = deferredResp.await()
 
             return if (response.isSuccessful) {
-                Gson().fromJson(response.body!!.string(), UnusualOptionsActivityPage::class.java)
+                val rawRespObj = gson
+                    .fromJson(response.body!!.string(), RawUnusualOptionsActivityPage::class.java)
+
+                rawRespObj.toUnusualOptionsActivityPage()
             } else {
                 null
             }

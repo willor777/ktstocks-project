@@ -1,10 +1,9 @@
 package com.willor.ktstockdata.historicchartdata
 
 import com.google.gson.Gson
-import com.willor.ktstockdata.common.Log
+import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.common.NetworkClient
 import com.willor.ktstockdata.common.addParamsToUrl
-import com.willor.ktstockdata.common.d
 import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
 import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
 import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
@@ -315,7 +314,7 @@ class HistoricChartData : IHistoricChartData {
 
             // Convert to HistoryResponse and return
             val rawJsonResponse = resp.body!!.string()
-            val history = Gson().fromJson(rawJsonResponse, HistoryResponse::class.java)
+            val history = gson.fromJson(rawJsonResponse, HistoryResponse::class.java)
 
             val verifyIntegrity = {
                 val data = history.chart.result[0].indicators.quote[0]
@@ -391,7 +390,7 @@ class HistoricChartData : IHistoricChartData {
 
             // Convert to HistoryResponse and return
             val rawJsonResponse = resp.body!!.string()
-            val history = Gson().fromJson(rawJsonResponse, HistoryResponse::class.java)
+            val history = gson.fromJson(rawJsonResponse, HistoryResponse::class.java)
 
             val verifyIntegrity = {
                 val data = history.chart.result[0].indicators.quote[0]
@@ -541,15 +540,25 @@ class HistoricChartData : IHistoricChartData {
 
 
     /**
-     * Replaces Null values with 0.0
+     * Replaces Null values with a neighboring value.
      */
     private fun removeNullValuesFromIntList(l: List<Int?>): List<Int> {
         val newList = mutableListOf<Int>()
-        l.forEach {
+        l.forEachIndexed { index, it ->
+
             if (it == null) {
-                newList.add(l.random() ?: 0)
+
+                val newValue = when (index){
+                    0 -> { 1 }
+                    l.lastIndex -> { l.lastIndex - 1 }
+                    else -> { index + 1 }
+                }
+
+                newList.add(newValue)
             } else {
+
                 newList.add(it)
+
             }
         }
         return newList

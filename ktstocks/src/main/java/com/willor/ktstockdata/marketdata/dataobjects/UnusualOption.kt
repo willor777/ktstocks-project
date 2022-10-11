@@ -1,31 +1,30 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-
 import com.google.gson.annotations.SerializedName
+import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOption
 
 data class UnusualOption(
-    @SerializedName("a")
     val ask: Double,
-    @SerializedName("b")
     val bid: Double,
-    @SerializedName("expiry")
     val contractExpiry: String,
-    @SerializedName("iv")
     val impVol: Double,
-    @SerializedName("oi")
     val openInt: Int,
-    @SerializedName("op")
     val lastPrice: Double,
-    @SerializedName("po")
     val otmPercentage: Double,
-    @SerializedName("s")
     val strikePrice: Double,
-    @SerializedName("t")
     val contractType: String,
-    @SerializedName("tk")
     val ticker: String,
-    @SerializedName("v")
     val volume: Int,
-    @SerializedName("vol/oi")
     val volOiRatio: Double
 )
+
+fun RawUnusualOption.toUnusualOption(): UnusualOption{
+    return UnusualOption(
+        ask, bid, contractExpiry, impVol,
+        openInt, lastPrice, otmPercentage,
+        strikePrice, contractType, ticker,
+        volume, volOiRatio
+    )
+}
+
+

@@ -1,8 +1,12 @@
 package com.willor.ktstockdata.common
 
+import com.google.gson.Gson
 import java.util.logging.Logger
 import kotlin.math.pow
 import kotlin.math.sqrt
+
+
+val gson: Gson = Gson()
 
 
 val Log: Logger = Logger.getGlobal()
