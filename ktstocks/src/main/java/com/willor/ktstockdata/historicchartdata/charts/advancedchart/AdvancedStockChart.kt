@@ -1,7 +1,7 @@
 package com.willor.ktstockdata.historicchartdata.charts.advancedchart
 
 import com.willor.ktstockdata.common.Log
-import com.willor.ktstockdata.common.d
+import com.willor.ktstockdata.common.w
 import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
 import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
 import java.util.*
@@ -52,7 +52,7 @@ class AdvancedStockChart(
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("DEBUG", e.stackTraceToString())
+                Log.w("DEBUG", e.stackTraceToString())
                 null
             }
         }

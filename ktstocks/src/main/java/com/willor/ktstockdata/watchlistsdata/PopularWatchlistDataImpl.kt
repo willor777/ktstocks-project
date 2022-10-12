@@ -36,7 +36,7 @@ class PopularWatchlistDataImpl : PopularWatchlistData {
 
             return uglyDataCollection
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "scrapeYfWatchlist encountered an Exception: $e\n" +
                         e.stackTraceToString()
             )

@@ -1,6 +1,5 @@
 package com.willor.ktstockdata.marketdata
 
-import com.google.gson.Gson
 import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.marketdata.dataobjects.*
 import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOptionsActivityPage
@@ -84,7 +83,7 @@ class MarketData : IMarketData {
             }
             return uglyData
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "scrapeBarchartQuoteTable() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -168,7 +167,7 @@ class MarketData : IMarketData {
             return payload.toMap()
 
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "scrapeYfQuoteTable() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -220,7 +219,7 @@ class MarketData : IMarketData {
                 fiftyTwoWeekLow = parseDouble(cleanValues[25])
             )
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseSnrBarchartPage() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -270,7 +269,7 @@ class MarketData : IMarketData {
                 brentCrudeOilFuture = Future.createFromList(dataList[19])
             )
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseFuturesData() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -296,7 +295,7 @@ class MarketData : IMarketData {
                 )
 
             } catch (e: Exception) {
-                Log.d("EXCEPTION", e.stackTraceToString() + "\n CAUSE...$data")
+                Log.w("EXCEPTION", e.stackTraceToString() + "\n CAUSE...$data")
                 null
             }
         }
@@ -363,7 +362,7 @@ class MarketData : IMarketData {
             )
 
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseMajorIndicesData() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -473,7 +472,7 @@ class MarketData : IMarketData {
             )
 
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseStockQuoteData() failed to parse $ticker quote page.\n" +
                         "Exception: $e\n" +
                         "Stacktrace: ${e.stackTraceToString()}"
@@ -571,7 +570,7 @@ class MarketData : IMarketData {
                 netAssetsAbbreviatedString = bodyData["Net Assets"]!!
             )
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseEtfQuoteData() failed to parse $ticker quote page. \n" +
                         "Exception: $e\n" +
                         "Stacktrace: ${e.stackTraceToString()}"
@@ -638,7 +637,7 @@ class MarketData : IMarketData {
                 parseInt(dataActual[11][1])
             )
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseOptionsStats() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -720,7 +719,7 @@ class MarketData : IMarketData {
                 competitorsList = competitorsList
             )
         } catch (e: Exception) {
-            Log.d(
+            Log.w(
                 tag, "parseStocksCompetitors() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
             )
@@ -883,7 +882,7 @@ class MarketData : IMarketData {
                 null
             }
         } catch (ex: Exception) {
-            Log.d("EXCEPTION", ex.stackTraceToString())
+            Log.w("EXCEPTION", ex.stackTraceToString())
             null
         }
     }
@@ -1009,7 +1008,7 @@ class MarketData : IMarketData {
                 null
             }
         } catch (ex: Exception) {
-            Log.d("EXCEPTION", ex.stackTraceToString())
+            Log.w("EXCEPTION", ex.stackTraceToString())
             return null
         }
     }

@@ -1,6 +1,7 @@
 package com.willor.ktstockdata.common
 
 import com.google.gson.Gson
+import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -12,8 +13,13 @@ val gson: Gson = Gson()
 val Log: Logger = Logger.getGlobal()
 
 
+fun Logger.w(tag: String, msg: String) {
+    Logger.getGlobal().warning("$tag\t$msg")
+}
+
+
 fun Logger.d(tag: String, msg: String) {
-    Logger.getGlobal().warning("$tag, $msg")
+    Logger.getGlobal().log(Level.parse("DEBUG"), "$tag\t$msg")
 }
 
 /** Creates the URL with query parameters added to the end of it (from Map<String,*>)
@@ -74,7 +80,7 @@ internal fun parseDouble(str: String): Double {
         s.replace(",", "")
             .toDouble()
     } catch (e: Exception) {
-        Log.d(
+        Log.w(
             "EXCEPTION", "tools.parseDouble() Failed...Returning Default 0.0\n"
                     + e.stackTraceToString()
         )
@@ -160,7 +166,7 @@ internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
 
         return 0
     } catch (e: Exception) {
-        Log.d(
+        Log.w(
             "EXCEPTION", "tools.parseLongFromBigAbbreviatedNumbers() Failed to parse" +
                     " Long. Returning 0.0 by default. Cause: $str\n" + e.stackTraceToString()
         )
@@ -177,7 +183,7 @@ internal fun parseInt(s: String): Int {
     return try {
         s.replace(" ", "").replace(",", "").toInt()
     } catch (e: Exception) {
-        Log.d(
+        Log.w(
             "EXCEPTION", "tools.parseInt() Failed to parse Int. Returning 0\n"
                     + e.stackTraceToString()
         )

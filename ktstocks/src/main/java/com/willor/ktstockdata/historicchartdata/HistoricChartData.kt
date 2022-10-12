@@ -1,6 +1,5 @@
 package com.willor.ktstockdata.historicchartdata
 
-import com.google.gson.Gson
 import com.willor.ktstockdata.common.*
 import com.willor.ktstockdata.common.NetworkClient
 import com.willor.ktstockdata.common.addParamsToUrl
@@ -336,7 +335,7 @@ class HistoricChartData : IHistoricChartData {
             return null
         } catch (e: Exception) {
             println(e.stackTraceToString())
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.w("EXCEPTION", e.stackTraceToString())
 
             return null
         }
@@ -412,7 +411,7 @@ class HistoricChartData : IHistoricChartData {
             return null
         } catch (e: Exception) {
             println(e.stackTraceToString())
-            Log.d("EXCEPTION", e.stackTraceToString())
+            Log.w("EXCEPTION", e.stackTraceToString())
 
             return null
         }
@@ -516,7 +515,7 @@ class HistoricChartData : IHistoricChartData {
             *\-------------------------------------------------------------------------/*
         """.trimIndent()
 
-        Log.d("NETWORK", msg)
+        Log.w("NETWORK", msg)
         println(msg)
     }
 

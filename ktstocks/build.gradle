@@ -22,7 +22,8 @@ dependencies {
     // TA Lib
     api 'com.tictactec:ta-lib:0.4.0'
 
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    // Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 }
 
 publishing {
@@ -30,7 +31,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.github.willor777'
             artifactId 'ktstockdatalib'
-            version '1.0.2'
+            version '1.0.3'
             from components.java
         }
     }

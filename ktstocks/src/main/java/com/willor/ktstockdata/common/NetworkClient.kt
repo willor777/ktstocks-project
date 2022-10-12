@@ -40,7 +40,7 @@ internal object NetworkClient {
         val resp = call.execute()
 
         if (!resp.isSuccessful) {
-            Log.d(
+            Log.w(
                 "NETWORK", "getWebpage call failed for url: $url." +
                         " Response Code: ${resp.code}"
             )
@@ -73,7 +73,7 @@ internal object NetworkClient {
         val resp = deferredResp.await()
 
         if (!resp.isSuccessful) {
-            Log.d(
+            Log.w(
                 "NETWORK", "getWebpageAsync call failed for url: $url." +
                         " Response Code: ${resp.code}"
             )

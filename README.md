@@ -1,27 +1,26 @@
 
-<h1>Setup</h1>
+<h1>Stock Data Api for Kotlin Projects</h1>
 
 
-Step 1.
+
+<h3>Add the Dependency </h3>
 
 ```groovy
 //  Add jitpack.io to your repositories
 maven { url 'https://jitpack.io' }
 
-
-```
-
-Step 2.
-
-```groovy
 // Add the dependency
 dependencies{
     implementation 'com.github.willor777:ktstocks-project:<...latest-version...>'
 }
 ```
 
+Version...
+[![](https://jitpack.io/v/willor777/ktstocks-project.svg)](https://jitpack.io/#willor777/ktstocks-project)
 
-<h1>Basic Usage</h1>
+
+
+<h3>Basic Usage</h3>
 
 ```kotlin
 
