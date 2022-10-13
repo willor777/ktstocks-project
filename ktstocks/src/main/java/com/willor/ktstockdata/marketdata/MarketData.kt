@@ -252,22 +252,11 @@ class MarketData : IMarketData {
             }
 
             return MajorFuturesData(
-                sp500Future = Future.createFromList(dataList[0]),
-                dowFuture = Future.createFromList(dataList[1]),
-                nasdaqFuture = Future.createFromList(dataList[2]),
-                russel2000Future = Future.createFromList(dataList[3]),
-                usTreasuryBondFuture = Future.createFromList(dataList[4]),
-                usTenYearTreasuryNoteFuture = Future.createFromList(dataList[5]),
-                usFiveYearTreasuryNoteFuture = Future.createFromList(dataList[6]),
-                usTwoYearTreasureNoteFuture = Future.createFromList(dataList[7]),
-                goldFuture = Future.createFromList(dataList[8]),
-                goldMicroFuture = Future.createFromList(dataList[9]),
-                silverFuture = Future.createFromList(dataList[10]),
-                microSilverFuture = Future.createFromList(dataList[11]),
-                crudeOilWTIFuture = Future.createFromList(dataList[15]),
-                rbobGasolineFuture = Future.createFromList(dataList[18]),
-                brentCrudeOilFuture = Future.createFromList(dataList[19])
+                data = dataList.mapNotNull {
+                    Future.createFromList(it)
+                }
             )
+
         } catch (e: Exception) {
             Log.w(
                 tag, "parseFuturesData() triggered an exception:" +
@@ -283,22 +272,6 @@ class MarketData : IMarketData {
      * Parses the finance.yahoo.com Major Indices Page
      */
     private fun parseMajorIndicesData(page: String): MajorIndicesData? {
-        val stripDataGetIndex = { data: List<String> ->
-            try {
-                Index(
-                    data[0].replace(" ", ""),
-                    data[1],
-                    parseDouble(data[2]),
-                    parseDouble(data[3]),
-                    parseDouble(data[4].substringBefore("%")),
-                    parseLongFromBigAbbreviatedNumbers(data[5])
-                )
-
-            } catch (e: Exception) {
-                Log.w("EXCEPTION", e.stackTraceToString() + "\n CAUSE...$data")
-                null
-            }
-        }
 
         try {
             val document = Jsoup.parse(page)
@@ -313,53 +286,17 @@ class MarketData : IMarketData {
                 val cleanInnerData = mutableListOf<String>()
                 val innerdata = rows[n].select("td")
                 for (i in 0..innerdata.lastIndex) {
-                    cleanInnerData.add(innerdata[i].text().replace(" ", ""))
+                    cleanInnerData.add(innerdata[i].text())
                 }
                 dataList.add(cleanInnerData)
             }
 
-            val indexMap = mutableMapOf<String, Index?>()
-            indexMap["sp"] = null; indexMap["dow"] = null; indexMap["nas"] = null
-            indexMap["russ"] = null; indexMap["vix"] = null; indexMap["ftse"] = null
-            indexMap["heng"] = null
-            for (n in 0..dataList.lastIndex) {
-                val data = dataList[n]
-
-                when (data[0]) {
-                    "^GSPC" -> {
-                        indexMap["sp"] = stripDataGetIndex(data)
-                    }
-                    "^DJI" -> {
-                        indexMap["dow"] = stripDataGetIndex(data)
-                    }
-                    "^IXIC" -> {
-                        indexMap["nas"] = stripDataGetIndex(data)
-                    }
-                    "RUT" -> {
-                        indexMap["russ"] = stripDataGetIndex(data)
-                    }
-                    "^VIX" -> {
-                        indexMap["vix"] = stripDataGetIndex(data)
-                    }
-                    "^FTSE" -> {
-                        indexMap["ftse"] = stripDataGetIndex(data)
-                    }
-                    "^HSI" -> {
-                        indexMap["heng"] = stripDataGetIndex(data)
-                    }
-                }
-
-            }
-
             return MajorIndicesData(
-                sp500 = indexMap["sp"],
-                dow = indexMap["dow"],
-                nasdaq = indexMap["nas"],
-                russel2000 = indexMap["russ"],
-                vix = indexMap["vix"],
-                ftse100 = indexMap["ftse"],
-                hengSeng = indexMap["heng"]
+                data = dataList.mapNotNull {
+                    Index.createFromList(it)
+                }
             )
+
 
         } catch (e: Exception) {
             Log.w(
