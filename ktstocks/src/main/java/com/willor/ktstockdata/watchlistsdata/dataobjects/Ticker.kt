@@ -9,4 +9,5 @@ data class Ticker(
     val volume: Int,
     val volumeThirtyDayAvg: Int,
     val marketCap: Long,
+    val marketCapAbbreviatedString: String
 )

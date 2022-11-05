@@ -61,7 +61,8 @@ class PopularWatchlistDataImpl : PopularWatchlistData {
                                 changePercent = parseDouble(rowData[4].substringBefore("%")),
                                 volume = parseLongFromBigAbbreviatedNumbers(rowData[5]).toInt(),
                                 volumeThirtyDayAvg = parseLongFromBigAbbreviatedNumbers(rowData[6]).toInt(),
-                                marketCap = parseLongFromBigAbbreviatedNumbers(rowData[7])
+                                marketCap = parseLongFromBigAbbreviatedNumbers(rowData[7]),
+                                rowData[7]
                             )
                         }
                     }
@@ -76,7 +77,8 @@ class PopularWatchlistDataImpl : PopularWatchlistData {
                                 changePercent = parseDouble(rowData[4].substringBefore("%")),
                                 volume = parseLongFromBigAbbreviatedNumbers(rowData[6]).toInt(),
                                 volumeThirtyDayAvg = parseLongFromBigAbbreviatedNumbers(rowData[7]).toInt(),
-                                marketCap = parseLongFromBigAbbreviatedNumbers(rowData[8])
+                                marketCap = parseLongFromBigAbbreviatedNumbers(rowData[8]),
+                                rowData[8]
                             )
                         }
                     }
