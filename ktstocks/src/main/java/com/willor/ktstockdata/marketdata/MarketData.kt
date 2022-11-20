@@ -16,6 +16,7 @@ import kotlin.coroutines.coroutineContext
 
 class MarketData : IMarketData {
 
+
     private val tag: String = MarketData::class.java.simpleName
 
 
@@ -25,27 +26,22 @@ class MarketData : IMarketData {
     private val getSnrLevelsUrl = { tick: String ->
         "https://www.barchart.com/stocks/quotes/${tick.uppercase()}/overview"
     }
-
     private val getYfQuoteUrl = { tick: String ->
         val ticker = tick.uppercase()
         "https://finance.yahoo.com/quote/$ticker?p=$ticker&.tsrc=fin-srch"
     }
-
     private val getOptionStatsUrl = { ticker: String ->
         "https://www.barchart.com/stocks/quotes/${ticker.uppercase()}/overview"
     }
-
     private val getStocksCompetitorsUrl = { ticker: String ->
         "https://www.marketwatch.com/investing/stock/$ticker?mod=search_symbol"
     }
-
     private val getUnusualOptionsActivityUrl = { pageNum: Int ->
         "https://app.fdscanner.com/api2/unusualvolume?p=0&page_size=50&page=$pageNum"
     }
-
     private val futuresDataUrl = "https://finance.yahoo.com/commodities"
-
     private val majorIndicesDataUrl = "https://finance.yahoo.com/world-indices"
+    private val analystsUpgradesDowngradesUrl = "https://www.marketwatch.com/tools/upgrades-downgrades"
 
 
     // Helper Methods -----------------------------------------------------------------------------
@@ -405,7 +401,8 @@ class MarketData : IMarketData {
                 ),
                 exDividendDate = parseDateYF(bodyData["Ex-Dividend Date"]!!),
                 oneYearTargetEstimate = parseDouble(bodyData["1y Target Est"]!!),
-                marketCapAbbreviatedString = bodyData["Market Cap"]!!
+                marketCapAbbreviatedString = bodyData["Market Cap"]!!,
+                name = topRowData["compName"]!!.substringBefore(" (")
             )
 
         } catch (e: Exception) {
@@ -504,7 +501,8 @@ class MarketData : IMarketData {
                     bodyData["Expense Ratio (net)"]!!.substringBefore("%")
                 ),
                 inceptionDate = dateFromString(bodyData["Inception Date"]!!),
-                netAssetsAbbreviatedString = bodyData["Net Assets"]!!
+                netAssetsAbbreviatedString = bodyData["Net Assets"]!!,
+                name = topRowData["compName"]!!.substringBefore(" (")
             )
         } catch (e: Exception) {
             Log.w(
@@ -702,6 +700,65 @@ class MarketData : IMarketData {
     }
 
 
+    private fun parseAnalystsUpgradesDowngrades(page: String): AnalystsUpgradesDowngrades?{
+        try{
+            val ratingTransform = { rating: String ->
+                when (rating) {
+                    "Upgrades" -> {
+                        1
+                    }
+
+                    "Maintains" -> {
+                        0
+                    }
+
+                    "Downgrades" -> {
+                        -1
+                    }
+
+                    else -> {
+                        0
+                    }
+                }
+            }
+
+            val doc = Jsoup.parse(page)
+            val table = doc.select("tbody")
+            val dataRows = table.select("tr")
+
+            val sdf = SimpleDateFormat("MM/dd/yyyy")
+            val ratingChanges = mutableListOf<AnalystGrade>()
+            for (r in dataRows) {
+                val data = r.select("td")
+                val ts = sdf.parse(data[0].text()).time
+                val ticker = data[1].text()
+                val company = data[2].text()
+                val rating = data[3].text()
+                val analysts = data[4].text()
+                ratingChanges.add(
+                    AnalystGrade(
+                        date = ts,
+                        ticker = ticker,
+                        company = company,
+                        ratingChange = ratingTransform(data[3].text()),
+                        analystFirm = analysts
+                    )
+                )
+            }
+            return AnalystsUpgradesDowngrades(
+                ratings = ratingChanges
+            )
+        } catch (e: Exception){
+            Log.w(
+                tag, "parseAnalystsUpgradesDowngrades() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
+            return null
+        }
+
+    }
+
+
     // Synchronous Methods ------------------------------------------------------------------------
 
 
@@ -822,6 +879,13 @@ class MarketData : IMarketData {
             Log.w("EXCEPTION", ex.stackTraceToString())
             null
         }
+    }
+
+
+
+    override fun getAnalystsUpgradesDowngrades(): AnalystsUpgradesDowngrades? {
+        val page = NetworkClient.getWebpage(analystsUpgradesDowngradesUrl) ?: return null
+        return parseAnalystsUpgradesDowngrades(page)
     }
 
 
@@ -949,4 +1013,13 @@ class MarketData : IMarketData {
             return null
         }
     }
+
+
+
+    override suspend fun getAnalystsUpgradesDowngradesAsync(): AnalystsUpgradesDowngrades? {
+        val page = NetworkClient.getWebpageAsync(analystsUpgradesDowngradesUrl) ?: return null
+        return parseAnalystsUpgradesDowngrades(page)
+    }
+
+
 }

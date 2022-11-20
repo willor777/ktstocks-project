@@ -33,4 +33,5 @@ data class StockQuote(
     val prepostChangeDollar: Double,
     val prepostChangePct: Double,
     val marketCapAbbreviatedString: String,
+    val name: String
 )

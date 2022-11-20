@@ -24,6 +24,8 @@ interface IMarketData {
 
     fun getUnusualOptionsActivity(pageNumber: Int = 0): UnusualOptionsActivityPage?
 
+    fun getAnalystsUpgradesDowngrades(): AnalystsUpgradesDowngrades?
+
     /**
      * Async Requests
      */
@@ -43,4 +45,7 @@ interface IMarketData {
     suspend fun getStocksCompetitorsAsync(ticker: String): StockCompetitorsList?
 
     suspend fun getUnusualOptionsActivityAsync(pageNumber: Int = 0): UnusualOptionsActivityPage?
+
+    suspend fun getAnalystsUpgradesDowngradesAsync(): AnalystsUpgradesDowngrades?
+
 }

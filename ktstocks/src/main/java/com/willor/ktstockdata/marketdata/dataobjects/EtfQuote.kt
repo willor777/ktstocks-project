@@ -32,5 +32,6 @@ data class EtfQuote(
     val prepostChangeDollar: Double,
     val prepostChangePct: Double,
     val netAssetsAbbreviatedString: String,
+    val name: String
 )
 
