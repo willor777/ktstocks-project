@@ -82,6 +82,7 @@ class PopularWatchlistDataImpl : PopularWatchlistData {
                             )
                         }
                     }
+
                     else -> {
                         returnValue = null
                     }

@@ -4,7 +4,6 @@ import com.willor.ktstockdata.common.Log
 import com.willor.ktstockdata.common.parseDouble
 import com.willor.ktstockdata.common.parseLongFromBigAbbreviatedNumbers
 import com.willor.ktstockdata.common.w
-import java.lang.Exception
 
 
 data class Future(
@@ -22,7 +21,7 @@ data class Future(
         /**
          * Using the ticker, Determine the Future's simple name (No expiry included)
          */
-        private fun getFutureName(ticker: String): String{
+        private fun getFutureName(ticker: String): String {
 
             return when (ticker) {
                 "ES=F" -> {
@@ -84,75 +83,99 @@ data class Future(
                 "BZ=F" -> {
                     "Brent Crude Oil"
                 }
-                "PL=F" ->{
+
+                "PL=F" -> {
                     "Platinum"
                 }
-                "HG=F" ->{
+
+                "HG=F" -> {
                     "Copper"
                 }
-                "PA=F" ->{
+
+                "PA=F" -> {
                     "Palladium"
                 }
-                "HO=F" ->{
+
+                "HO=F" -> {
                     "Heating Oil"
                 }
-                "NG=F" ->{
+
+                "NG=F" -> {
                     "Natural Gas"
                 }
-                "B0=F" ->{      // Pretty sure this is meant to be a O, not a 0
+
+                "B0=F" -> {      // Pretty sure this is meant to be a O, not a 0
                     "Mont Belvieu LDH Propane"
                 }
-                "BO=F" ->{      // So i'm registering it's ticker for both
+
+                "BO=F" -> {      // So i'm registering it's ticker for both
                     "Mont Belvieu LDH Propane"
                 }
-                "ZC=F" ->{
+
+                "ZC=F" -> {
                     "Corn"
                 }
-                "ZO=F" ->{
+
+                "ZO=F" -> {
                     "Oat"
                 }
-                "KE=F" ->{
+
+                "KE=F" -> {
                     "KC HRW Wheat"
                 }
-                "ZR=F" ->{
+
+                "ZR=F" -> {
                     "Rough Rice"
                 }
-                "ZM=F" ->{
+
+                "ZM=F" -> {
                     "Soybean Meal"
                 }
-                "ZL=F" ->{
+
+                "ZL=F" -> {
                     "Soybean Oil"
                 }
-                "ZS=F" ->{
+
+                "ZS=F" -> {
                     "Soybean"
                 }
-                "GF=F" ->{
+
+                "GF=F" -> {
                     "Feeder Cattle"
                 }
-                "HE=F" ->{
+
+                "HE=F" -> {
                     "Lean Hogs"
                 }
-                "LE=F" ->{
+
+                "LE=F" -> {
                     "Live Cattle"
                 }
-                "CC=F" ->{
+
+                "CC=F" -> {
                     "Cocoa"
                 }
-                "KC=F" ->{
+
+                "KC=F" -> {
                     "Coffee"
                 }
-                "CT=F" ->{
+
+                "CT=F" -> {
                     "Cotton"
                 }
-                "OJ=F" ->{
+
+                "OJ=F" -> {
                     "Orange Juice"
                 }
-                "LBS=F" ->{
+
+                "LBS=F" -> {
                     "Lumber"
                 }
-                "SB=F" ->{
+
+                "SB=F" -> {
                     "Sugar"
                 }
+
                 else -> {
                     ""
                 }
@@ -160,7 +183,7 @@ data class Future(
         }
 
         fun createFromList(data: List<String>): Future? {
-            try{
+            try {
                 val ticker = data[0].replace(" ", "")
 
                 val name = getFutureName(ticker).takeIf {
@@ -177,9 +200,11 @@ data class Future(
                     volumeToday = parseLongFromBigAbbreviatedNumbers(data[6]),
                     volumeAvgThirtyDay = parseLongFromBigAbbreviatedNumbers(data[7]),
                 )
-            }catch (e: Exception){
-                Log.w("Future", "Failed to create data object 'Future' from list data." +
-                        " List Data: $data. Exception: $e\nStacktrace: ${e.stackTraceToString()}")
+            } catch (e: Exception) {
+                Log.w(
+                    "Future", "Failed to create data object 'Future' from list data." +
+                            " List Data: $data. Exception: $e\nStacktrace: ${e.stackTraceToString()}"
+                )
                 return null
             }
         }

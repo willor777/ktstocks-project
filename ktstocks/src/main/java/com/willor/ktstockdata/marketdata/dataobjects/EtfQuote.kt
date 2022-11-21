@@ -1,7 +1,5 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-import java.util.*
-
 data class EtfQuote(
     val ticker: String,
     val changeDollarRegMarket: Double,
@@ -26,7 +24,7 @@ data class EtfQuote(
     val yearToDateTotalReturn: Double,
     val betaFiveYearMonthly: Double,
     val expenseRatioNetPercentage: Double,
-    val inceptionDate: Date? = null,
+    val inceptionDate: String? = null,
     val quoteTimeStamp: Long = System.currentTimeMillis(),
     val prepostPrice: Double,
     val prepostChangeDollar: Double,

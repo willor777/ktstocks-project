@@ -148,6 +148,7 @@ internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
                             .padEnd(3, '0') + "000000"
                         ).toLong()
             }
+
             s.contains("T") -> {
                 return (
                         previxValue + splitString[1]
@@ -155,6 +156,7 @@ internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
                             .padEnd(3, '0') + "000000000"
                         ).toLong()
             }
+
             s.contains("k") -> {
                 return (
                         previxValue + splitString[1]

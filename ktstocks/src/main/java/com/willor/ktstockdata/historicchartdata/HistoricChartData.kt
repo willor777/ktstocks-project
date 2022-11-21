@@ -1,8 +1,6 @@
 package com.willor.ktstockdata.historicchartdata
 
 import com.willor.ktstockdata.common.*
-import com.willor.ktstockdata.common.NetworkClient
-import com.willor.ktstockdata.common.addParamsToUrl
 import com.willor.ktstockdata.historicchartdata.charts.StockChartBase
 import com.willor.ktstockdata.historicchartdata.charts.advancedchart.AdvancedStockChart
 import com.willor.ktstockdata.historicchartdata.charts.simplechart.SimpleStockChart
@@ -547,10 +545,18 @@ class HistoricChartData : IHistoricChartData {
 
             if (it == null) {
 
-                val newValue = when (index){
-                    0 -> { 1 }
-                    l.lastIndex -> { l.lastIndex - 1 }
-                    else -> { index + 1 }
+                val newValue = when (index) {
+                    0 -> {
+                        1
+                    }
+
+                    l.lastIndex -> {
+                        l.lastIndex - 1
+                    }
+
+                    else -> {
+                        index + 1
+                    }
                 }
 
                 newList.add(newValue)

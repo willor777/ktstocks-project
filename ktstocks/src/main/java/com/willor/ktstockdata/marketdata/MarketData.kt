@@ -10,7 +10,6 @@ import okhttp3.Request
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.coroutines.coroutineContext
 
 
@@ -312,20 +311,6 @@ class MarketData : IMarketData {
     ): StockQuote? {
         try {
 
-            val parseDateYF = { s: String ->
-                val result: Date?
-                if (s.contains("N/A")) {
-                    result = null
-                } else {
-                    var str = s
-                    if (s.contains("-")) {
-                        str = s.substringBefore("-")
-                    }
-                    result = SimpleDateFormat("MMM dd, yyyy").parse(str)
-                }
-                result
-            }
-
             val rawScrapeData = scrapeData ?: return null
 
             val topRowData = rawScrapeData["topRow"]!!
@@ -386,10 +371,8 @@ class MarketData : IMarketData {
                 betaFiveYearMonthly = parseDouble(bodyData["Beta (5Y Monthly)"]!!),
                 peRatioTTM = parseDouble(bodyData["PE Ratio (TTM)"]!!),
                 epsTTM = parseDouble(bodyData["EPS (TTM)"]!!),
-                nextEarningsDate = parseDateYF(
-                    bodyData["Earnings Date"]!!
-                        .substringBefore(" -")
-                ),
+                nextEarningsDate = bodyData["Earnings Date"]!!
+                    .substringBefore(" -"),
                 forwardDivYieldValue = parseDouble(
                     bodyData["Forward Dividend & Yield"]!!
                         .substringBefore(" (")
@@ -399,7 +382,7 @@ class MarketData : IMarketData {
                         .substringAfter("(")
                         .substringBefore("%")
                 ),
-                exDividendDate = parseDateYF(bodyData["Ex-Dividend Date"]!!),
+                exDividendDate = bodyData["Ex-Dividend Date"]!!,
                 oneYearTargetEstimate = parseDouble(bodyData["1y Target Est"]!!),
                 marketCapAbbreviatedString = bodyData["Market Cap"]!!,
                 name = topRowData["compName"]!!.substringBefore(" (")
@@ -424,14 +407,6 @@ class MarketData : IMarketData {
     ): EtfQuote? {
         try {
 
-            val dateFromString = { s: String ->
-                val result: Date? = if (s.contains("N/A")) {
-                    null
-                } else {
-                    SimpleDateFormat("yyyy-MM-dd").parse(s)
-                }
-                result
-            }
             val rawScrapeData = scrapeData ?: return null
             val topRowData = rawScrapeData["topRow"]!!
             val bodyData = rawScrapeData["body"]!!
@@ -500,7 +475,7 @@ class MarketData : IMarketData {
                 expenseRatioNetPercentage = parseDouble(
                     bodyData["Expense Ratio (net)"]!!.substringBefore("%")
                 ),
-                inceptionDate = dateFromString(bodyData["Inception Date"]!!),
+                inceptionDate = bodyData["Inception Date"]!!,
                 netAssetsAbbreviatedString = bodyData["Net Assets"]!!,
                 name = topRowData["compName"]!!.substringBefore(" (")
             )
@@ -700,8 +675,8 @@ class MarketData : IMarketData {
     }
 
 
-    private fun parseAnalystsUpgradesDowngrades(page: String): AnalystsUpgradesDowngrades?{
-        try{
+    private fun parseAnalystsUpgradesDowngrades(page: String): AnalystsUpgradesDowngrades? {
+        try {
             val ratingTransform = { rating: String ->
                 when (rating) {
                     "Upgrades" -> {
@@ -740,7 +715,7 @@ class MarketData : IMarketData {
                         date = ts,
                         ticker = ticker,
                         company = company,
-                        ratingChange = ratingTransform(data[3].text()),
+                        ratingChange = ratingTransform(rating),
                         analystFirm = analysts
                     )
                 )
@@ -748,7 +723,7 @@ class MarketData : IMarketData {
             return AnalystsUpgradesDowngrades(
                 ratings = ratingChanges
             )
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.w(
                 tag, "parseAnalystsUpgradesDowngrades() triggered an exception:" +
                         " $e\n${e.stackTraceToString()}"
@@ -869,8 +844,10 @@ class MarketData : IMarketData {
                 .newCall(buildUoaRequest(pageNumber)).execute()
 
             if (response.isSuccessful) {
-                val rawRespObj = gson.fromJson(response.body!!.string(),
-                    RawUnusualOptionsActivityPage::class.java)
+                val rawRespObj = gson.fromJson(
+                    response.body!!.string(),
+                    RawUnusualOptionsActivityPage::class.java
+                )
                 rawRespObj.toUnusualOptionsActivityPage()
             } else {
                 null
@@ -880,7 +857,6 @@ class MarketData : IMarketData {
             null
         }
     }
-
 
 
     override fun getAnalystsUpgradesDowngrades(): AnalystsUpgradesDowngrades? {
@@ -1013,7 +989,6 @@ class MarketData : IMarketData {
             return null
         }
     }
-
 
 
     override suspend fun getAnalystsUpgradesDowngradesAsync(): AnalystsUpgradesDowngrades? {

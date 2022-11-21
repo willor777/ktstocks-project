@@ -1,6 +1,5 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-import com.google.gson.annotations.SerializedName
 import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOption
 
 data class UnusualOption(
@@ -18,7 +17,7 @@ data class UnusualOption(
     val volOiRatio: Double
 )
 
-fun RawUnusualOption.toUnusualOption(): UnusualOption{
+fun RawUnusualOption.toUnusualOption(): UnusualOption {
     return UnusualOption(
         ask, bid, contractExpiry, impVol,
         openInt, lastPrice, otmPercentage,

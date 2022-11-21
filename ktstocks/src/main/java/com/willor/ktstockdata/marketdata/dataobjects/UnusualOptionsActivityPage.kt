@@ -1,6 +1,5 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOption
 import com.willor.ktstockdata.marketdata.dataobjects.responses.RawUnusualOptionsActivityPage
 
 data class UnusualOptionsActivityPage(
@@ -11,8 +10,8 @@ data class UnusualOptionsActivityPage(
 )
 
 
-fun RawUnusualOptionsActivityPage.toUnusualOptionsActivityPage(): UnusualOptionsActivityPage{
-    val newData = data.map{
+fun RawUnusualOptionsActivityPage.toUnusualOptionsActivityPage(): UnusualOptionsActivityPage {
+    val newData = data.map {
         it.toUnusualOption()
     }
 

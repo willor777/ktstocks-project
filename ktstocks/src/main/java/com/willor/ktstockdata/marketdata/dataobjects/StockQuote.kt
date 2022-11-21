@@ -1,7 +1,5 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-import java.util.*
-
 data class StockQuote(
     val ticker: String,
     val changeDollarRegMarket: Double,
@@ -23,10 +21,10 @@ data class StockQuote(
     val betaFiveYearMonthly: Double,
     val peRatioTTM: Double,
     val epsTTM: Double,
-    val nextEarningsDate: Date? = null,
+    val nextEarningsDate: String,
     val forwardDivYieldValue: Double,
     val forwardDivYieldPercentage: Double,
-    val exDividendDate: Date? = null,
+    val exDividendDate: String,
     val oneYearTargetEstimate: Double,
     val quoteTimeStamp: Long = System.currentTimeMillis(),
     val prepostPrice: Double,

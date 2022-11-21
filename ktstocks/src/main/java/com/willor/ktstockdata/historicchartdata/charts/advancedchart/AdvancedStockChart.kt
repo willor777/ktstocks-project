@@ -272,6 +272,7 @@ class AdvancedStockChart(
             "G" -> {
                 true
             }
+
             else -> {
                 false
             }
@@ -287,6 +288,7 @@ class AdvancedStockChart(
             "R" -> {
                 true
             }
+
             else -> {
                 false
             }
