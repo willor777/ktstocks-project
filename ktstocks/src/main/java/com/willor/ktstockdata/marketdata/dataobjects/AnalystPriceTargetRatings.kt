@@ -1,5 +1,5 @@
 package com.willor.ktstockdata.marketdata.dataobjects
 
-data class AnalystRatingsAndPriceTargets(
+data class AnalystPriceTargetRatings(
     val data: List<AnalystRating>
 )

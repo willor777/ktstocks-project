@@ -133,15 +133,14 @@ internal fun parseLongFromBigAbbreviatedNumbers(str: String): Long {
  * return 1 as default
  */
 internal fun parseInt(s: String): Int {
-    return try {
-        s.replace(" ", "").replace(",", "").toInt()
-    } catch (e: Exception) {
-        Log.w(
-            "EXCEPTION", "tools.parseInt() Failed to parse Int. Returning 0\n"
-                    + e.stackTraceToString()
-        )
+    if (s.isBlank()){
         return 0
     }
+
+    val n = s.replace(Regex("[^0-9]+"), "").toIntOrNull()
+
+
+    return n ?: 0
 }
 
 
@@ -149,32 +148,13 @@ internal fun parseInt(s: String): Int {
  * Attempts to parse Double from a String. Will remove all commas and spaces. On failure will
  * return 0.0 as default
  */
-internal fun parseDouble(str: String): Double {
-
-    try {
-        if (str.isNullOrEmpty()) {
-            return 0.0
-        }
-        val s = str.replace(" ", "").replace("$", "").replace("%", "")
-
-        // Check for N/A
-        if (str.contains("N/A")) {
-            return 0.0
-        }
-
-        if (!(s[s.lastIndex].isDigit()) && s.contains("-")) {
-            return 0.0
-        }
-        return s
-            .replace(",", "")
-            .toDouble()
-    } catch (e: Exception) {
-        Log.w(
-            "EXCEPTION", "tools.parseDouble() Failed due to argument '$str'...Returning Default 0.0\n"
-                    + e.stackTraceToString()
-        )
+internal fun parseDouble(s: String): Double {
+    if (s.isBlank()){
         return 0.0
     }
-}
 
+    val n = s.replace(Regex("[^0-9.]+"), "").toDoubleOrNull()
+
+    return n ?: 0.0
+}
 

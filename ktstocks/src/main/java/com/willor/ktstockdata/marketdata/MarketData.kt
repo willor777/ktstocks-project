@@ -40,6 +40,7 @@ class MarketData : IMarketData {
     }
     private val futuresDataUrl = "https://finance.yahoo.com/commodities"
     private val majorIndicesDataUrl = "https://finance.yahoo.com/world-indices"
+    private val analystsPriceTargetChangesUrl = "https://www.marketbeat.com/ratings/"
 
 
     // Helper Methods -----------------------------------------------------------------------------
@@ -637,6 +638,65 @@ class MarketData : IMarketData {
     }
 
 
+    private fun parseAnalystsPriceTargetRatings(page: String): AnalystPriceTargetRatings? {
+        try {
+            val doc = Jsoup.parse(page)
+            val rows = doc.select("tr")
+
+            val payload = mutableListOf<AnalystRating>()
+            for (r in rows) {
+                val data = r.select("td")
+                if (data.size != 8) {
+                    continue
+                }
+                val symbol = data[0].select("div.ticker-area").text()
+                val assetName = data[0].select("div.title-area").text()
+                val analystAction = data[1].text()
+                val brokerageName = data[2].text().substringBefore(" Subscribe to MarketBeat")
+                val analystAtBrokerage = if (data[3].text().isNullOrEmpty()) "Not Specified" else data[3].text()
+                val curPriceAndChangePct = data[4].text()
+                val oldTargetNewTarget = data[5].text()
+                val rating = data[6].text().substringAfter(" ➝ ").ifBlank { "None" }
+
+                val oldPriceTarget = parseDouble(
+                    oldTargetNewTarget.substringBefore(" ➝").replace("$", "")
+                )
+                val newPriceTarget = parseDouble(
+                    oldTargetNewTarget.substringAfter(" ➝").replace("$", "")
+                )
+
+                payload.add(
+                    AnalystRating(
+                        ticker = symbol,
+                        assetName = assetName,
+                        action = analystAction.replace(" by", ""),
+                        brokerageName = brokerageName,
+                        analystName = analystAtBrokerage,
+                        curPrice = parseDouble(
+                            curPriceAndChangePct.substringBefore(" ").replace("$", "")
+                        ),
+                        pctChange = parseDouble(
+                            curPriceAndChangePct.substringAfter(" ").replace("%", "")
+                        ),
+                        oldPriceTarget = oldPriceTarget,
+                        newPriceTarget = newPriceTarget,
+                        sizeOfChange = newPriceTarget - oldPriceTarget,
+                        rating = rating
+                    )
+                )
+            }
+            return AnalystPriceTargetRatings(payload)
+
+        } catch (e: Exception) {
+            Log.w(
+                tag, "parseAnalystsPriceTargetRatings() triggered an exception:" +
+                        " $e\n${e.stackTraceToString()}"
+            )
+            return null
+        }
+    }
+
+
     /**
      * Builds a request to retrieve data from
      */
@@ -799,6 +859,17 @@ class MarketData : IMarketData {
     }
 
 
+    /**
+     * Retrieves the Latest Price Change ratings by Top Analysts
+     * */
+
+    override fun getLatestAnalystPriceTargetRatings(): AnalystPriceTargetRatings? {
+
+        val page = NetworkClient.getWebpage(analystsPriceTargetChangesUrl) ?: return null
+        return parseAnalystsPriceTargetRatings(page)
+    }
+
+
     // Async Methods -----------------------------------------------------------------------------
 
     /**
@@ -922,6 +993,14 @@ class MarketData : IMarketData {
             Log.w("EXCEPTION", ex.stackTraceToString())
             return null
         }
+    }
+
+    /**
+     * Asynchronously retrieves the Latest Price Change ratings by Top Analysts
+     */
+    override suspend fun getLatestAnalystPriceTargetRatingsAsync(): AnalystPriceTargetRatings? {
+        val page = NetworkClient.getWebpageAsync(analystsPriceTargetChangesUrl) ?: return null
+        return parseAnalystsPriceTargetRatings(page)
     }
 
 }
