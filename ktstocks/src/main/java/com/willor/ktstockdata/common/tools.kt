@@ -7,86 +7,37 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-val gson: Gson = Gson()
+internal val gson: Gson = Gson()
 
 
-val Log: Logger = Logger.getGlobal()
+internal val Log: Logger = Logger.getGlobal()
 
 
-fun Logger.w(tag: String, msg: String) {
+internal fun Logger.w(tag: String, msg: String) {
     Logger.getGlobal().warning("$tag\t$msg")
 }
 
 
-fun Logger.d(tag: String, msg: String) {
+internal fun Logger.d(tag: String, msg: String) {
     Logger.getGlobal().log(Level.parse("DEBUG"), "$tag\t$msg")
 }
 
-/** Creates the URL with query parameters added to the end of it (from Map<String,*>)
- *
- * Map of parameters is converted to a params string '?key=value&key=value'
- */
-internal fun addParamsToUrl(urlString: String, params: Map<String, *>): String {
 
-    var queryString = "?"
+internal fun calculateStandardDeviationForDoubles(l: List<Double>): Double {
+    var sum = 0.0
+    var standardDeviation = 0.0
 
-    for (k: String in params.keys) {
-        queryString += "$k=${params[k].toString()}&"
+    for (num in l) {
+        sum += num
     }
 
-    return urlString + queryString.substring(0, queryString.length - 2)
-}
+    val mean = sum / 10
 
-
-/**
- * Returns one of 6 of the most used user-agents randomly
- */
-internal fun getRandomUserAgent(): String {
-    val userAgents = listOf(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)" +
-                " Chrome/58.0.3029.110 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0",
-
-        "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; Trident/5.0)",
-
-        "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0; MDDCJS)",
-
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)" +
-                " Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
-
-        "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)"
-    )
-
-    return userAgents[(0..5).random()]
-}
-
-
-/**
- * Attempts to parse Double from a String. Will remove all commas and spaces. On failure will
- * return 0.0 as default
- */
-internal fun parseDouble(str: String): Double {
-
-    return try {
-        // Check for N/A
-        if (str.contains("N/A")) {
-            return 0.0
-        }
-
-        val s = str.replace(" ", "")
-        if (!(s[s.lastIndex].isDigit()) && s.contains("-")) {
-            return 0.0
-        }
-        s.replace(",", "")
-            .toDouble()
-    } catch (e: Exception) {
-        Log.w(
-            "EXCEPTION", "tools.parseDouble() Failed...Returning Default 0.0\n"
-                    + e.stackTraceToString()
-        )
-        println("DEFAULT")
-        return 0.0
+    for (num in l) {
+        standardDeviation += (num - mean).pow(2.0)
     }
+
+    return sqrt(standardDeviation / 10)
 }
 
 
@@ -194,21 +145,36 @@ internal fun parseInt(s: String): Int {
 }
 
 
-fun calculateStandardDeviationForDoubles(l: List<Double>): Double {
-    var sum = 0.0
-    var standardDeviation = 0.0
+/**
+ * Attempts to parse Double from a String. Will remove all commas and spaces. On failure will
+ * return 0.0 as default
+ */
+internal fun parseDouble(str: String): Double {
 
-    for (num in l) {
-        sum += num
+    try {
+        if (str.isNullOrEmpty()) {
+            return 0.0
+        }
+        val s = str.replace(" ", "").replace("$", "").replace("%", "")
+
+        // Check for N/A
+        if (str.contains("N/A")) {
+            return 0.0
+        }
+
+        if (!(s[s.lastIndex].isDigit()) && s.contains("-")) {
+            return 0.0
+        }
+        return s
+            .replace(",", "")
+            .toDouble()
+    } catch (e: Exception) {
+        Log.w(
+            "EXCEPTION", "tools.parseDouble() Failed due to argument '$str'...Returning Default 0.0\n"
+                    + e.stackTraceToString()
+        )
+        return 0.0
     }
-
-    val mean = sum / 10
-
-    for (num in l) {
-        standardDeviation += (num - mean).pow(2.0)
-    }
-
-    return sqrt(standardDeviation / 10)
 }
 
 

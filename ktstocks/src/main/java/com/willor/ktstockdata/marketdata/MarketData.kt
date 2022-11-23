@@ -40,7 +40,6 @@ class MarketData : IMarketData {
     }
     private val futuresDataUrl = "https://finance.yahoo.com/commodities"
     private val majorIndicesDataUrl = "https://finance.yahoo.com/world-indices"
-    private val analystsUpgradesDowngradesUrl = "https://www.marketwatch.com/tools/upgrades-downgrades"
 
 
     // Helper Methods -----------------------------------------------------------------------------
@@ -675,65 +674,6 @@ class MarketData : IMarketData {
     }
 
 
-    private fun parseAnalystsUpgradesDowngrades(page: String): AnalystsUpgradesDowngrades? {
-        try {
-            val ratingTransform = { rating: String ->
-                when (rating) {
-                    "Upgrades" -> {
-                        1
-                    }
-
-                    "Maintains" -> {
-                        0
-                    }
-
-                    "Downgrades" -> {
-                        -1
-                    }
-
-                    else -> {
-                        0
-                    }
-                }
-            }
-
-            val doc = Jsoup.parse(page)
-            val table = doc.select("tbody")
-            val dataRows = table.select("tr")
-
-            val sdf = SimpleDateFormat("MM/dd/yyyy")
-            val ratingChanges = mutableListOf<AnalystGrade>()
-            for (r in dataRows) {
-                val data = r.select("td")
-                val ts = sdf.parse(data[0].text()).time
-                val ticker = data[1].text()
-                val company = data[2].text()
-                val rating = data[3].text()
-                val analysts = data[4].text()
-                ratingChanges.add(
-                    AnalystGrade(
-                        date = ts,
-                        ticker = ticker,
-                        company = company,
-                        ratingChange = ratingTransform(rating),
-                        analystFirm = analysts
-                    )
-                )
-            }
-            return AnalystsUpgradesDowngrades(
-                ratings = ratingChanges
-            )
-        } catch (e: Exception) {
-            Log.w(
-                tag, "parseAnalystsUpgradesDowngrades() triggered an exception:" +
-                        " $e\n${e.stackTraceToString()}"
-            )
-            return null
-        }
-
-    }
-
-
     // Synchronous Methods ------------------------------------------------------------------------
 
 
@@ -856,12 +796,6 @@ class MarketData : IMarketData {
             Log.w("EXCEPTION", ex.stackTraceToString())
             null
         }
-    }
-
-
-    override fun getAnalystsUpgradesDowngrades(): AnalystsUpgradesDowngrades? {
-        val page = NetworkClient.getWebpage(analystsUpgradesDowngradesUrl) ?: return null
-        return parseAnalystsUpgradesDowngrades(page)
     }
 
 
@@ -989,12 +923,5 @@ class MarketData : IMarketData {
             return null
         }
     }
-
-
-    override suspend fun getAnalystsUpgradesDowngradesAsync(): AnalystsUpgradesDowngrades? {
-        val page = NetworkClient.getWebpageAsync(analystsUpgradesDowngradesUrl) ?: return null
-        return parseAnalystsUpgradesDowngrades(page)
-    }
-
 
 }
