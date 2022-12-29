@@ -700,14 +700,21 @@ class MarketData : IMarketData {
     /**
      * Builds a request to retrieve data from
      */
-    private fun buildUoaRequest(pageNumber: Int): Request {
+    private fun buildUoaRequest(
+        pageNumber: Int,
+        sortAsc: Boolean = false,
+        sortBy: UoaSortByOptions = UoaSortByOptions.VolOiRatio
+    ): Request {
+
+        val url = getUnusualOptionsActivityUrl(pageNumber) + "&sort_asc=$sortAsc&sort_by=${sortBy.key}"
 
         return Request.Builder()
             // WARNING -- Don't ever increase the page size above 90.
             // That is for "Premium" users of app.fdscanner.com
-            .url(
-                getUnusualOptionsActivityUrl(pageNumber)
-            )
+//            .url(
+//                getUnusualOptionsActivityUrl(pageNumber)
+//            )
+            .url(url)
             .get()
             .addHeader("Accept", "*/*")
             .addHeader("Accept-Language", "en-US,en;q=0.9")
@@ -831,17 +838,15 @@ class MarketData : IMarketData {
         return parseStocksCompetitors(page)
     }
 
-
-    /**
+        /**
      * Retrieves unusual stock option activity, defined by high volume to open interest ratio.
      * Option volume that exceeds open interest signals new positions by institutional traders
      */
-    override fun getUnusualOptionsActivity(pageNumber: Int): UnusualOptionsActivityPage? {
-
+    override fun getUnusualOptionsActivity(pageNumber: Int, sortAsc: Boolean, sortBy: UoaSortByOptions): UnusualOptionsActivityPage? {
         return try {
 
             val response = NetworkClient.getClient()
-                .newCall(buildUoaRequest(pageNumber)).execute()
+                .newCall(buildUoaRequest(pageNumber, sortAsc, sortBy)).execute()
 
             if (response.isSuccessful) {
                 val rawRespObj = gson.fromJson(
@@ -855,8 +860,7 @@ class MarketData : IMarketData {
         } catch (ex: Exception) {
             Log.w("EXCEPTION", ex.stackTraceToString())
             null
-        }
-    }
+        }    }
 
 
     /**
@@ -970,13 +974,13 @@ class MarketData : IMarketData {
      * Asynchronously retrieves unusual stock option activity, defined by high volume to open interest ratio.
      * Option volume that exceeds open interest signals new positions by institutional traders
      */
-    override suspend fun getUnusualOptionsActivityAsync(pageNumber: Int): UnusualOptionsActivityPage? {
+    override suspend fun getUnusualOptionsActivityAsync(pageNumber: Int, sortAsc: Boolean, sortBy: UoaSortByOptions): UnusualOptionsActivityPage? {
         try {
 
             val deferredResp = CoroutineScope(coroutineContext)
                 .async(Dispatchers.Unconfined) {
                     NetworkClient.getClient()
-                        .newCall(buildUoaRequest(pageNumber)).execute()
+                        .newCall(buildUoaRequest(pageNumber, sortAsc, sortBy)).execute()
                 }
 
             val response = deferredResp.await()
@@ -995,6 +999,7 @@ class MarketData : IMarketData {
         }
     }
 
+
     /**
      * Asynchronously retrieves the Latest Price Change ratings by Top Analysts
      */
@@ -1002,5 +1007,8 @@ class MarketData : IMarketData {
         val page = NetworkClient.getWebpageAsync(analystsPriceTargetChangesUrl) ?: return null
         return parseAnalystsPriceTargetRatings(page)
     }
+
+
+
 
 }
